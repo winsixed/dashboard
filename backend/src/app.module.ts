@@ -9,6 +9,7 @@ import { AuditModule } from './audit/audit.module';
 import { RolesModule } from './roles/roles.module';
 import { RequestsModule } from './requests/requests.module';
 import { ImportModule } from './import/import.module';
+import { ExportModule } from './export/export.module';
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { ImportModule } from './import/import.module';
     RequestsModule,
     AuditModule,
     ImportModule,
+    ExportModule,
   ],
   providers: [],
 })
