@@ -1,4 +1,4 @@
-import { BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Post, Req, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
+import { BadRequestException, Body, Controller, Get, Param, ParseIntPipe, Post, Res, UploadedFile, UseGuards, UseInterceptors } from '@nestjs/common';
 import { Express } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { ImportService } from './import.service';
@@ -6,6 +6,7 @@ import { ExportService } from './export.service';
 import { AuthGuard } from '../auth/auth.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { Permission } from '../auth/permission.decorator';
+import { User } from '../auth/user.decorator';
 
 @Controller()
 export class AdminController {
@@ -21,13 +22,13 @@ export class AdminController {
   async import(
     @UploadedFile() file: Express.Multer.File,
     @Body('entityType') entityType: string,
-    @Req() req,
+    @User() user,
   ) {
     if (!file) throw new BadRequestException('File required');
     if (!['flavors', 'stocks'].includes(entityType)) {
       throw new BadRequestException('Invalid entityType');
     }
-    return this.importService.createJob(file, entityType, req.user.id);
+    return this.importService.createJob(file, entityType, user.id);
   }
 
   @Get('admin/import/:id')
