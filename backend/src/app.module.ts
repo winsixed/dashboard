@@ -6,6 +6,7 @@ import { AdminModule } from './admin/admin.module';
 import { StockModule } from './stocks/stock.module';
 import { UsersModule } from './users/users.module';
 import { AuditModule } from './audit/audit.module';
+import { RolesModule } from './roles/roles.module';
 
 @Module({
   imports: [
@@ -15,6 +16,7 @@ import { AuditModule } from './audit/audit.module';
     AdminModule,
     StockModule,
     UsersModule,
+    RolesModule,
     AuditModule,
   ],
   providers: [],
