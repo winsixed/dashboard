@@ -5,6 +5,7 @@ import { FlavorsModule } from './flavors/flavors.module';
 import { AdminModule } from './admin/admin.module';
 import { StockModule } from './stocks/stock.module';
 import { UsersModule } from './users/users.module';
+import { AuditModule } from './audit/audit.module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { UsersModule } from './users/users.module';
     AdminModule,
     StockModule,
     UsersModule,
+    AuditModule,
   ],
   providers: [],
 })
