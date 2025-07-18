@@ -1,0 +1,37 @@
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { RequestsService } from './requests.service';
+import { CreateRequestDto } from './dto/create-request.dto';
+import { UpdateRequestStatusDto } from './dto/update-request-status.dto';
+import { AuthGuard } from '../auth/auth.guard';
+import { PermissionsGuard } from '../auth/permissions.guard';
+import { Permission } from '../auth/permission.decorator';
+import { User } from '../auth/user.decorator';
+
+@Controller('requests')
+export class RequestsController {
+  constructor(private requests: RequestsService) {}
+
+  @Get()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permission('view_requests')
+  list() {
+    return this.requests.list();
+  }
+
+  @Post()
+  @UseGuards(AuthGuard)
+  create(@Body() dto: CreateRequestDto, @User() user) {
+    return this.requests.create(dto, user.id);
+  }
+
+  @Put(':id/status')
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permission('approve_requests')
+  updateStatus(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() dto: UpdateRequestStatusDto,
+    @User() user,
+  ) {
+    return this.requests.updateStatus(id, dto.status, user.id);
+  }
+}

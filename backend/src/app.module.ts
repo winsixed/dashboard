@@ -7,6 +7,7 @@ import { StockModule } from './stocks/stock.module';
 import { UsersModule } from './users/users.module';
 import { AuditModule } from './audit/audit.module';
 import { RolesModule } from './roles/roles.module';
+import { RequestsModule } from './requests/requests.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { RolesModule } from './roles/roles.module';
     StockModule,
     UsersModule,
     RolesModule,
+    RequestsModule,
     AuditModule,
   ],
   providers: [],
