@@ -17,6 +17,7 @@ model User {
   roleId       Int
   permissions  UserPermission[]
   auditLogs    AuditLog[]
+  importJobs   ImportJob[]
 }
 
 model Role {
@@ -63,6 +64,7 @@ model Flavor {
   name        String
   description String?
   profile     String?
+  stocks      Stock[]
 }
 
 model AuditLog {
@@ -74,4 +76,22 @@ model AuditLog {
   userId    Int
   timestamp DateTime @default(now())
   details   Json
+}
+
+model Stock {
+  id        Int    @id @default(autoincrement())
+  flavor    Flavor @relation(fields: [flavorId], references: [id])
+  flavorId  Int
+  quantity  Int
+}
+
+model ImportJob {
+  id           Int      @id @default(autoincrement())
+  entityType   String
+  filename     String
+  uploadedBy   User     @relation(fields: [uploadedById], references: [id])
+  uploadedById Int
+  status       String   @default("pending")
+  errors       Json?
+  createdAt    DateTime @default(now())
 }
