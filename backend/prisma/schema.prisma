@@ -16,6 +16,7 @@ model User {
   role         Role       @relation(fields: [roleId], references: [id])
   roleId       Int
   permissions  UserPermission[]
+  auditLogs    AuditLog[]
 }
 
 model Role {
@@ -47,4 +48,30 @@ model UserPermission {
   userId       Int
   permission   Permission  @relation(fields: [permissionId], references: [id])
   permissionId Int
+}
+
+model Brand {
+  id      Int      @id @default(autoincrement())
+  name    String   @unique
+  flavors Flavor[]
+}
+
+model Flavor {
+  id          Int      @id @default(autoincrement())
+  brand       Brand    @relation(fields: [brandId], references: [id])
+  brandId     Int
+  name        String
+  description String?
+  profile     String?
+}
+
+model AuditLog {
+  id        Int      @id @default(autoincrement())
+  entity    String
+  entityId  Int
+  action    String
+  user      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  timestamp DateTime @default(now())
+  details   Json
 }
