@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "scripts": {
     "start": "node dist/main.js",
-    "dev": "nest start --watch"
+    "dev": "nest start --watch",
+    "seed:permissions": "ts-node src/seed/permissions.seed.ts",
+    "seed:admin": "ts-node src/seed/admin.seed.ts"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
