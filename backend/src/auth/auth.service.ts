@@ -21,9 +21,32 @@ export class AuthService {
 
   async login(username: string, password: string) {
     const user = await this.validateUser(username, password);
-    const payload = { id: user.id, username: user.username, roleId: user.roleId };
+    const payload = { id: user.id, roleId: user.roleId };
     return {
-      token: await this.jwt.signAsync(payload),
+      access_token: await this.jwt.signAsync(payload),
+    };
+  }
+
+  async register(data: {
+    firstName: string;
+    lastName: string;
+    username: string;
+    password: string;
+    roleId: number;
+  }) {
+    const passwordHash = await bcrypt.hash(data.password, 10);
+    const user = await this.prisma.user.create({
+      data: {
+        firstName: data.firstName,
+        lastName: data.lastName,
+        username: data.username,
+        passwordHash,
+        roleId: data.roleId,
+      },
+    });
+    const payload = { id: user.id, roleId: user.roleId };
+    return {
+      access_token: await this.jwt.signAsync(payload),
     };
   }
 }
