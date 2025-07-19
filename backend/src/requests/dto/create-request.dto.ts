@@ -1,9 +1,12 @@
-import { IsInt } from 'class-validator';
+import { IsArray, IsInt, IsOptional, IsString, ArrayNotEmpty } from 'class-validator';
 
 export class CreateRequestDto {
-  @IsInt()
-  flavorId: number;
+  @IsString()
+  @IsOptional()
+  comment?: string;
 
-  @IsInt()
-  quantity: number;
+  @IsArray()
+  @ArrayNotEmpty()
+  @IsInt({ each: true })
+  flavorIds: number[];
 }
