@@ -1,10 +1,10 @@
 import { Module } from '@nestjs/common';
 import { AuditLogsController } from './audit-logs.controller';
-import { AuditService } from '../audit/audit.service';
 import { PrismaService } from '../prisma.service';
+import { AuditLogsService } from './audit-logs.service';
 
 @Module({
   controllers: [AuditLogsController],
-  providers: [AuditService, PrismaService],
+  providers: [AuditLogsService, PrismaService],
 })
 export class AuditLogsModule {}
