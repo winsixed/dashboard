@@ -8,6 +8,7 @@ backend/dist
 
 # Env
 backend/.env
+frontend/.env.local
 
 # Logs
 npm-debug.log*

@@ -1,0 +1,43 @@
+'use client';
+import { useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+
+export default function LoginPage() {
+  const { login } = useAuth();
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+
+  const onSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    try {
+      await login(email, password);
+    } catch (e: any) {
+      setError('Invalid credentials');
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-background flex items-center justify-center text-white">
+      <form onSubmit={onSubmit} className="space-y-6 bg-[#1E1E1E] p-8 rounded-lg shadow-xl w-96">
+        <h1 className="text-2xl font-bold text-center">Login</h1>
+        {error && <p className="text-red-500">{error}</p>}
+        <input
+          type="email"
+          value={email}
+          onChange={e => setEmail(e.target.value)}
+          placeholder="Email"
+          className="w-full p-2 bg-[#2A2A2A] text-white rounded"
+        />
+        <input
+          type="password"
+          value={password}
+          onChange={e => setPassword(e.target.value)}
+          placeholder="Password"
+          className="w-full p-2 bg-[#2A2A2A] text-white rounded"
+        />
+        <button type="submit" className="w-full p-2 bg-accent text-black font-semibold rounded">Login</button>
+      </form>
+    </div>
+  );
+}
