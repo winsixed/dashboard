@@ -48,4 +48,34 @@ export class AuditService {
       user: { id: l.user.id, fullName: `${l.user.firstName} ${l.user.lastName}` },
     }));
   }
+
+  async paginate(page = 1, pageSize = 20) {
+    const [total, logs] = await this.prisma.$transaction([
+      this.prisma.auditLog.count(),
+      this.prisma.auditLog.findMany({
+        orderBy: { id: 'desc' },
+        skip: (page - 1) * pageSize,
+        take: pageSize,
+        include: {
+          user: { select: { id: true, firstName: true, lastName: true } },
+        },
+      }),
+    ]);
+    return {
+      total,
+      items: logs.map(l => ({
+        id: l.id,
+        user: {
+          id: l.user.id,
+          firstName: l.user.firstName,
+          lastName: l.user.lastName,
+        },
+        entity: l.entity,
+        entityId: l.entityId,
+        action: l.action,
+        timestamp: l.timestamp,
+        details: l.details,
+      })),
+    };
+  }
 }
