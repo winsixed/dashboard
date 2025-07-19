@@ -2,38 +2,72 @@ import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma.service';
 import { AuditService } from '../audit/audit.service';
 import { CreateRequestDto } from './dto/create-request.dto';
+import { UpdateRequestDto } from './dto/update-request.dto';
 
 @Injectable()
 export class RequestsService {
   constructor(private prisma: PrismaService, private audit: AuditService) {}
 
-  list() {
-    return this.prisma.request.findMany({
+  async list() {
+    const requests = await this.prisma.request.findMany({
       include: {
-        user: { select: { id: true, firstName: true, lastName: true } },
-        flavor: { select: { id: true, name: true } },
+        createdBy: { select: { id: true, firstName: true, lastName: true } },
+        flavors: { include: { flavor: { select: { id: true, name: true } } } },
       },
     });
+    return requests.map(r => ({
+      id: r.id,
+      status: r.status,
+      comment: r.comment,
+      createdAt: r.createdAt,
+      createdBy: r.createdBy,
+      flavors: r.flavors.map(f => f.flavor),
+    }));
   }
 
   async create(dto: CreateRequestDto, userId: number) {
     const request = await this.prisma.request.create({
       data: {
-        flavorId: dto.flavorId,
-        quantity: dto.quantity,
-        userId,
+        comment: dto.comment,
+        createdById: userId,
       },
     });
+
+    if (dto.flavorIds && dto.flavorIds.length > 0) {
+      await this.prisma.requestFlavor.createMany({
+        data: dto.flavorIds.map(id => ({ requestId: request.id, flavorId: id })),
+      });
+    }
+
     await this.audit.log('Request', request.id, 'CREATE', userId, dto);
-    return request;
+
+    return this.prisma.request.findUnique({
+      where: { id: request.id },
+      include: {
+        createdBy: { select: { id: true, firstName: true, lastName: true } },
+        flavors: { include: { flavor: { select: { id: true, name: true } } } },
+      },
+    });
   }
 
-  async updateStatus(id: number, status: string, userId: number) {
-    const request = await this.prisma.request.update({
+  async update(id: number, dto: UpdateRequestDto, userId: number) {
+    const data: any = {};
+    if (dto.status !== undefined) data.status = dto.status;
+    if (dto.comment !== undefined) data.comment = dto.comment;
+
+    const request = await this.prisma.request.update({ where: { id }, data });
+
+    const diff = Object.fromEntries(
+      Object.entries(dto).filter(([, v]) => v !== undefined),
+    );
+    await this.audit.log('Request', id, 'UPDATE', userId, diff);
+
+    return this.prisma.request.findUnique({
       where: { id },
-      data: { status },
+      include: {
+        createdBy: { select: { id: true, firstName: true, lastName: true } },
+        flavors: { include: { flavor: { select: { id: true, name: true } } } },
+      },
     });
-    await this.audit.log('Request', id, 'UPDATE', userId, { status });
-    return request;
   }
 }
