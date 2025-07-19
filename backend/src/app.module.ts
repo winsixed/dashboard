@@ -10,6 +10,7 @@ import { RolesModule } from './roles/roles.module';
 import { RequestsModule } from './requests/requests.module';
 import { ImportModule } from './import/import.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
+import { ExportModule } from './export/export.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { AuditLogsModule } from './audit-logs/audit-logs.module';
     AuditModule,
     AuditLogsModule,
     ImportModule,
+    ExportModule,
   ],
   providers: [],
 })
