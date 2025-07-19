@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
 import { RolesService } from './roles.service';
 import { CreateRoleDto } from './dto/create-role.dto';
-import { UpdatePermissionsDto } from './dto/update-permissions.dto';
+import { UpdateRoleDto } from './dto/update-role.dto';
 import { AuthGuard } from '../auth/auth.guard';
 import { PermissionsGuard } from '../auth/permissions.guard';
 import { Permission } from '../auth/permission.decorator';
@@ -12,6 +12,8 @@ export class RolesController {
   constructor(private roles: RolesService) {}
 
   @Get()
+  @UseGuards(AuthGuard, PermissionsGuard)
+  @Permission('manage_roles')
   list() {
     return this.roles.list();
   }
@@ -31,14 +33,14 @@ export class RolesController {
     return { success: true };
   }
 
-  @Put(':id/permissions')
+  @Put(':id')
   @UseGuards(AuthGuard, PermissionsGuard)
   @Permission('manage_roles')
-  updatePermissions(
+  update(
     @Param('id', ParseIntPipe) id: number,
-    @Body() dto: UpdatePermissionsDto,
+    @Body() dto: UpdateRoleDto,
     @User() user,
   ) {
-    return this.roles.updatePermissions(id, dto.permissions, user.id);
+    return this.roles.update(id, dto, user.id);
   }
 }
