@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 interface Role {
   id: number;
@@ -24,7 +25,9 @@ export default function RoleTable({ roles }: { roles: Role[] }) {
             <td className="p-2">{role.name}</td>
             <td className="p-2">{role.permissions.map(p => p.code).join(', ')}</td>
             <td className="p-2">
-              <button className="px-2 py-1 bg-accent text-black rounded">Edit</button>
+              <Link href={`/roles/${role.id}`} className="px-2 py-1 bg-accent text-black rounded">
+                Edit
+              </Link>
             </td>
           </tr>
         ))}
