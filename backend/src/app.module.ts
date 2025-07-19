@@ -11,6 +11,7 @@ import { RequestsModule } from './requests/requests.module';
 import { ImportModule } from './import/import.module';
 import { AuditLogsModule } from './audit-logs/audit-logs.module';
 import { ExportModule } from './export/export.module';
+import { DashboardModule } from './dashboard/dashboard.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ExportModule } from './export/export.module';
     AuditLogsModule,
     ImportModule,
     ExportModule,
+    DashboardModule,
   ],
   providers: [],
 })
