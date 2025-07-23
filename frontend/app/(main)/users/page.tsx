@@ -1,88 +1,87 @@
-'use client';
-import { useEffect, useState } from 'react';
-import api from '../../../lib/api';
-import AuthGuard from '../../../components/AuthGuard';
-import Spinner from '../../../components/Spinner';
-import UserTable from '../../../components/UserTable';
+"use client";
+
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+import AuthGuard from "../../../components/AuthGuard";
+import Spinner from "../../../components/Spinner";
+import api from "../../../lib/api";
+import { useAuth } from "../../../context/AuthContext";
 
 interface ApiUser {
   id: number;
   firstName: string;
   lastName: string;
-  username: string;
-  role: { id: number; name: string };
-  createdAt?: string;
+  email: string;
+  role: { name: string };
+  createdAt: string;
 }
 
-const LIMIT = 10;
-
 export default function UsersPage() {
+  const { user } = useAuth();
   const [users, setUsers] = useState<ApiUser[]>([]);
-  const [search, setSearch] = useState('');
-  const [role, setRole] = useState('');
-  const [offset, setOffset] = useState(0);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    api.get<ApiUser[]>('/users').then(res => setUsers(res.data)).finally(() => setLoading(false));
+    api
+      .get<ApiUser[]>("/users")
+      .then((res) => setUsers(res.data))
+      .finally(() => setLoading(false));
   }, []);
 
-  const roles = Array.from(new Set(users.map(u => u.role.name)));
-
-  const filtered = users.filter(u => {
-    const matchesSearch = (
-      `${u.firstName} ${u.lastName} ${u.username}`
-        .toLowerCase()
-        .includes(search.toLowerCase())
-    );
-    const matchesRole = role ? u.role.name === role : true;
-    return matchesSearch && matchesRole;
-  });
-
-  const paginated = filtered.slice(offset, offset + LIMIT);
-
-  const nextPage = () => setOffset(Math.min(offset + LIMIT, Math.max(filtered.length - LIMIT, 0)));
-  const prevPage = () => setOffset(Math.max(0, offset - LIMIT));
+  const permissions = user?.permissions?.map((p: any) => p.code) || [];
+  const canCreate = permissions.includes("users:create");
 
   return (
     <AuthGuard>
       <div className="space-y-4">
-        <div className="flex space-x-2 items-center">
-          <input
-            type="text"
-            placeholder="Search"
-            value={search}
-            onChange={e => { setOffset(0); setSearch(e.target.value); }}
-            className="bg-[#1E1E1E] p-2 rounded w-64"
-          />
-          <select
-            value={role}
-            onChange={e => { setOffset(0); setRole(e.target.value); }}
-            className="bg-[#1E1E1E] p-2 rounded"
-          >
-            <option value="">All Roles</option>
-            {roles.map(r => (
-              <option key={r} value={r}>{r}</option>
-            ))}
-          </select>
+        <div className="flex justify-end">
+          {canCreate && (
+            <Link
+              href="/users/new"
+              className="px-3 py-2 bg-accent text-black rounded"
+            >
+              + Add User
+            </Link>
+          )}
         </div>
-        {loading ? <Spinner /> : <UserTable users={paginated} />}
-        <div className="flex justify-end space-x-2">
-          <button
-            onClick={prevPage}
-            disabled={offset === 0}
-            className="px-4 py-2 bg-accent text-black rounded disabled:opacity-50"
-          >
-            Prev
-          </button>
-          <button
-            onClick={nextPage}
-            disabled={offset + LIMIT >= filtered.length}
-            className="px-4 py-2 bg-accent text-black rounded disabled:opacity-50"
-          >
-            Next
-          </button>
-        </div>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <table className="w-full text-sm text-left bg-[#1E1E1E] rounded">
+            <thead>
+              <tr>
+                <th className="p-2">Name</th>
+                <th className="p-2">Email</th>
+                <th className="p-2">Role</th>
+                <th className="p-2">Created At</th>
+                <th className="p-2">Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              {users.map((u) => (
+                <tr key={u.id} className="border-t border-gray-700">
+                  <td className="p-2">
+                    {u.firstName} {u.lastName}
+                  </td>
+                  <td className="p-2">{u.email}</td>
+                  <td className="p-2">{u.role.name}</td>
+                  <td className="p-2">
+                    {u.createdAt ? new Date(u.createdAt).toLocaleString() : ""}
+                  </td>
+                  <td className="p-2">
+                    <Link
+                      href={`/users/${u.id}`}
+                      className="px-2 py-1 bg-accent text-black rounded"
+                    >
+                      View
+                    </Link>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </AuthGuard>
   );
