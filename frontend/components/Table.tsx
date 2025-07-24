@@ -21,11 +21,11 @@ export default function Table({ requests, showDetails = false }: TableProps) {
         <thead>
           <tr>
             {showDetails && <th className="p-2">ID</th>}
-            <th className="p-2">Status</th>
-            {showDetails && <th className="p-2">Created At</th>}
-            <th className="p-2">User</th>
-            <th className="p-2">Comment</th>
-            <th className="p-2">Flavors</th>
+            <th className="p-2">Статус</th>
+            {showDetails && <th className="p-2">Создано</th>}
+            <th className="p-2">Пользователь</th>
+            <th className="p-2">Комментарий</th>
+            <th className="p-2">Вкусы</th>
           </tr>
         </thead>
         <tbody>

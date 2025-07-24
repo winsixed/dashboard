@@ -13,8 +13,8 @@ export default function PermissionTable({ permissions }: { permissions: Permissi
         <thead>
           <tr>
             <th className="p-2">ID</th>
-            <th className="p-2">Code</th>
-            <th className="p-2">Description</th>
+            <th className="p-2">Код</th>
+            <th className="p-2">Описание</th>
           </tr>
         </thead>
         <tbody>

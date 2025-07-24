@@ -41,7 +41,7 @@ export default function UserPermissionsPage() {
   if (!canView) {
     return (
       <AuthGuard>
-        <p>You do not have permission to view permissions.</p>
+        <p>У вас нет прав для просмотра прав доступа.</p>
       </AuthGuard>
     );
   }
@@ -56,9 +56,9 @@ export default function UserPermissionsPage() {
             <table className="min-w-full text-sm text-left bg-[#1E1E1E] rounded">
               <thead>
                 <tr>
-                  <th className="p-2">Code</th>
-                  <th className="p-2">Description</th>
-                  <th className="p-2">Roles</th>
+                  <th className="p-2">Код</th>
+                  <th className="p-2">Описание</th>
+                  <th className="p-2">Роли</th>
                 </tr>
               </thead>
               <tbody>

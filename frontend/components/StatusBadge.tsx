@@ -12,7 +12,14 @@ const colors: Record<string, string> = {
 
 export default function StatusBadge({ status }: StatusBadgeProps) {
   const color = colors[status] || 'bg-gray-500';
+  const labels: Record<string, string> = {
+    pending: 'В ожидании',
+    approved: 'Одобрено',
+    rejected: 'Отклонено',
+  };
   return (
-    <span className={`px-2 py-1 rounded text-xs font-semibold ${color}`}>{status}</span>
+    <span className={`px-2 py-1 rounded text-xs font-semibold ${color}`}>{
+      labels[status] || status
+    }</span>
   );
 }

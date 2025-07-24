@@ -41,7 +41,7 @@ export default function BrandDetailsPage() {
         setFlavors(flavorRes.data);
         setError('');
       })
-      .catch(() => setError('Failed to load brand'))
+      .catch(() => setError('Не удалось загрузить бренд'))
       .finally(() => setLoading(false));
   }, [params.id]);
 
@@ -67,39 +67,39 @@ export default function BrandDetailsPage() {
                       href={`/brands/${brand.id}/edit`}
                       className="block w-full sm:w-auto px-4 py-2 bg-accent text-black rounded"
                     >
-                      Edit
+                      Редактировать
                     </Link>
                   )}
                   {canDelete && (
                     <button
                       onClick={async () => {
-                        if (window.confirm('Are you sure you want to delete this brand?')) {
+                        if (window.confirm('Вы уверены, что хотите удалить этот бренд?')) {
                           try {
                             await api.delete(`/brands/${brand.id}`);
-                            toast.success('Brand deleted');
+                            toast.success('Бренд удалён');
                             router.push('/brands');
                           } catch (err) {
-                            toast.error('Failed to delete brand');
+                            toast.error('Не удалось удалить бренд');
                           }
                         }
                       }}
                       className="block w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded"
                     >
-                      Delete
+                      Удалить
                     </button>
                   )}
                 </div>
               )}
             </div>
-            <h2 className="text-lg font-semibold mb-2">Flavors</h2>
+            <h2 className="text-lg font-semibold mb-2">Вкусы</h2>
             {flavors.length > 0 ? (
               <div className="overflow-x-auto">
                 <table className="min-w-full text-sm">
                   <thead>
                     <tr>
-                      <th className="p-2 text-left">Name</th>
-                      <th className="p-2 text-left">Description</th>
-                      <th className="p-2 text-left">Profile</th>
+                      <th className="p-2 text-left">Название</th>
+                      <th className="p-2 text-left">Описание</th>
+                      <th className="p-2 text-left">Профиль</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -114,7 +114,7 @@ export default function BrandDetailsPage() {
                 </table>
               </div>
             ) : (
-              <p>No flavors found</p>
+              <p>Вкусы не найдены</p>
             )}
           </div>
         </div>

@@ -34,7 +34,7 @@ export default function RequestDetailsPage() {
         setRequest(res.data);
         setError('');
       })
-      .catch(() => setError('Failed to load request'))
+      .catch(() => setError('Не удалось загрузить заявку'))
       .finally(() => setLoading(false));
   };
 
@@ -43,30 +43,30 @@ export default function RequestDetailsPage() {
   const approve = async () => {
     try {
       await api.put(`/requests/${params.id}/status`, { status: 'approved' });
-      toast.success('Request approved');
+      toast.success('Заявка одобрена');
       fetchData();
     } catch (err) {
-      toast.error('Failed to update status');
+      toast.error('Не удалось обновить статус');
     }
   };
 
   const reject = async () => {
     try {
       await api.put(`/requests/${params.id}/status`, { status: 'rejected' });
-      toast.success('Request rejected');
+      toast.success('Заявка отклонена');
       fetchData();
     } catch (err) {
-      toast.error('Failed to update status');
+      toast.error('Не удалось обновить статус');
     }
   };
 
   const remove = async () => {
     try {
       await api.delete(`/requests/${params.id}`);
-      toast.success('Request deleted');
+      toast.success('Заявка удалена');
       router.push('/requests');
     } catch (err) {
-      toast.error('Failed to delete request');
+      toast.error('Не удалось удалить заявку');
     }
   };
 
@@ -82,19 +82,19 @@ export default function RequestDetailsPage() {
         <div className="space-y-4 p-4 max-w-screen-sm mx-auto">
           {error && <p className="text-red-500">{error}</p>}
           <div className="bg-[#1E1E1E] p-4 rounded space-y-2 text-sm">
-            <h1 className="text-xl font-bold mb-4">Request #{request.id}</h1>
+            <h1 className="text-xl font-bold mb-4">Заявка #{request.id}</h1>
             <div className="flex flex-col sm:flex-row sm:items-center">
               <span className="font-semibold sm:w-32">ID</span>
               <span className="mt-1 sm:mt-0">{request.id}</span>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center">
-              <span className="font-semibold sm:w-32">Status</span>
+              <span className="font-semibold sm:w-32">Статус</span>
               <div className="mt-1 sm:mt-0">
                 <StatusBadge status={request.status} />
               </div>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-start">
-              <span className="font-semibold sm:w-32">Flavors</span>
+              <span className="font-semibold sm:w-32">Вкусы</span>
               <div className="mt-1 sm:mt-0 flex flex-wrap gap-1">
                 {request.flavors.map(f => (
                   <span
@@ -107,19 +107,19 @@ export default function RequestDetailsPage() {
               </div>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center">
-              <span className="font-semibold sm:w-32">Created by</span>
+              <span className="font-semibold sm:w-32">Создатель</span>
               <span className="mt-1 sm:mt-0">
                 {request.createdBy.firstName} {request.createdBy.lastName}
               </span>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-center">
-              <span className="font-semibold sm:w-32">Created at</span>
+              <span className="font-semibold sm:w-32">Создано</span>
               <span className="mt-1 sm:mt-0">
                 {new Date(request.createdAt).toLocaleString()}
               </span>
             </div>
             <div className="flex flex-col sm:flex-row sm:items-start">
-              <span className="font-semibold sm:w-32">Comment</span>
+              <span className="font-semibold sm:w-32">Комментарий</span>
               <span className="mt-1 sm:mt-0 break-words">
                 {request.comment || '-'}
               </span>
@@ -132,7 +132,7 @@ export default function RequestDetailsPage() {
                   href={`/requests/${request.id}/edit`}
                   className="px-4 py-2 bg-accent text-black rounded"
                 >
-                  Edit
+                  Редактировать
                 </Link>
               )}
               {canModerate && (
@@ -141,19 +141,19 @@ export default function RequestDetailsPage() {
                     onClick={approve}
                     className="px-4 py-2 bg-green-600 text-black rounded"
                   >
-                    Approve
+                    Одобрить
                   </button>
                   <button
                     onClick={reject}
                     className="px-4 py-2 bg-red-600 text-black rounded"
                   >
-                    Reject
+                    Отклонить
                   </button>
                   <button
                     onClick={remove}
                     className="px-4 py-2 bg-red-800 text-black rounded"
                   >
-                    Delete
+                    Удалить
                   </button>
                 </>
               )}

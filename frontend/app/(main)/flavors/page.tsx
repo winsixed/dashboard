@@ -54,7 +54,7 @@ export default function FlavorsPage() {
   if (!canView) {
     return (
       <AuthGuard>
-        <p>You do not have permission to view flavors.</p>
+        <p>У вас нет прав для просмотра вкусов.</p>
       </AuthGuard>
     );
   }
@@ -65,7 +65,7 @@ export default function FlavorsPage() {
         <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 space-y-2 sm:space-y-0">
           <input
             type="text"
-            placeholder="Search"
+            placeholder="Поиск"
             value={search}
             onChange={e => setSearch(e.target.value)}
             className="bg-[#1E1E1E] p-2 rounded w-full sm:w-64"
@@ -75,7 +75,7 @@ export default function FlavorsPage() {
             onChange={e => setBrandId(e.target.value ? Number(e.target.value) : '')}
             className="bg-[#1E1E1E] p-2 rounded w-full sm:w-auto"
           >
-            <option value="">All Brands</option>
+            <option value="">Все бренды</option>
             {brands.map(b => (
               <option key={b.id} value={b.id}>
                 {b.name}
@@ -84,7 +84,7 @@ export default function FlavorsPage() {
           </select>
           {canCreate && (
             <Link href="/flavors/new" className="w-full sm:w-auto sm:ml-auto px-3 py-2 bg-accent text-black rounded text-center">
-              + Add Flavor
+              + Добавить вкус
             </Link>
           )}
         </div>
@@ -95,10 +95,10 @@ export default function FlavorsPage() {
             <table className="min-w-full text-sm text-left bg-[#1E1E1E] rounded">
               <thead>
                 <tr>
-                  <th className="p-2">Name</th>
-                  <th className="p-2">Profile</th>
-                  <th className="p-2">Brand</th>
-                  <th className="p-2">Actions</th>
+                  <th className="p-2">Название</th>
+                  <th className="p-2">Профиль</th>
+                  <th className="p-2">Бренд</th>
+                  <th className="p-2">Действия</th>
                 </tr>
               </thead>
               <tbody>
@@ -109,7 +109,7 @@ export default function FlavorsPage() {
                   <td className="p-2">{f.brand.name}</td>
                   <td className="p-2">
                     <Link href={`/flavors/${f.id}`} className="px-2 py-1 bg-accent text-black rounded">
-                      View
+                      Просмотр
                     </Link>
                   </td>
                 </tr>

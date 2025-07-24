@@ -34,7 +34,7 @@ export default function UsersPage() {
   return (
     <AuthGuard>
       {!canView ? (
-        <p>You do not have permission to view users.</p>
+        <p>У вас нет прав для просмотра пользователей.</p>
       ) : loading ? (
         <Spinner />
       ) : (
@@ -44,10 +44,10 @@ export default function UsersPage() {
               <thead>
                 <tr>
                   <th className="p-2">ID</th>
-                  <th className="p-2">First Name</th>
-                  <th className="p-2">Last Name</th>
+                  <th className="p-2">Имя</th>
+                  <th className="p-2">Фамилия</th>
                   <th className="p-2">Email</th>
-                  <th className="p-2">Roles</th>
+                  <th className="p-2">Роли</th>
                 </tr>
               </thead>
               <tbody>

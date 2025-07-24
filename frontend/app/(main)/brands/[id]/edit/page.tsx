@@ -34,7 +34,7 @@ export default function BrandEditPage() {
         setName(res.data.name);
         setError('');
       })
-      .catch(() => setError('Failed to load brand'))
+      .catch(() => setError('Не удалось загрузить бренд'))
       .finally(() => setLoading(false));
   }, [params.id]);
 
@@ -44,10 +44,10 @@ export default function BrandEditPage() {
     setError('');
     try {
       await api.patch(`/brands/${params.id}`, { name });
-      toast.success('Brand saved');
+      toast.success('Бренд сохранён');
       router.push(`/brands/${params.id}`);
     } catch (err) {
-      toast.error('Failed to save brand');
+      toast.error('Не удалось сохранить бренд');
     } finally {
       setSaving(false);
     }
@@ -56,7 +56,7 @@ export default function BrandEditPage() {
   if (!canEdit) {
     return (
       <AuthGuard>
-        <p>You do not have permission to edit brands.</p>
+        <p>У вас нет прав для редактирования брендов.</p>
       </AuthGuard>
     );
   }
@@ -70,7 +70,7 @@ export default function BrandEditPage() {
           <form onSubmit={onSubmit} className="space-y-4">
             {error && <p className="text-red-500">{error}</p>}
             <div>
-              <label className="block mb-1">Name</label>
+              <label className="block mb-1">Название</label>
               <input
                 type="text"
                 value={name}
@@ -83,7 +83,7 @@ export default function BrandEditPage() {
               disabled={saving}
               className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
             >
-              {saving ? 'Saving...' : 'Save Changes'}
+              {saving ? 'Сохранение...' : 'Сохранить изменения'}
             </button>
           </form>
         </div>

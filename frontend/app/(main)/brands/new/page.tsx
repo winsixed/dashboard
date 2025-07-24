@@ -24,10 +24,10 @@ export default function BrandCreatePage() {
     setError('');
     try {
       const res = await api.post('/brands', { name });
-      toast.success('Brand created');
+      toast.success('Бренд создан');
       router.push(`/brands/${res.data.id}`);
     } catch (err) {
-      toast.error('Failed to create brand');
+      toast.error('Не удалось создать бренд');
     } finally {
       setSaving(false);
     }
@@ -36,7 +36,7 @@ export default function BrandCreatePage() {
   if (!canCreate) {
     return (
       <AuthGuard>
-        <p>You do not have permission to create brands.</p>
+        <p>У вас нет прав для создания брендов.</p>
       </AuthGuard>
     );
   }
@@ -47,7 +47,7 @@ export default function BrandCreatePage() {
         <form onSubmit={onSubmit} className="space-y-4">
           {error && <p className="text-red-500">{error}</p>}
           <div>
-            <label className="block mb-1">Name</label>
+            <label className="block mb-1">Название</label>
             <input
               type="text"
               value={name}
@@ -60,7 +60,7 @@ export default function BrandCreatePage() {
             disabled={saving}
             className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
-            {saving ? 'Saving...' : 'Create Brand'}
+            {saving ? 'Сохранение...' : 'Создать бренд'}
           </button>
         </form>
       </div>

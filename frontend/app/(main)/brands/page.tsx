@@ -37,7 +37,7 @@ export default function BrandsPage() {
               href="/brands/new"
               className="w-full sm:w-auto mb-4 px-3 py-2 bg-accent text-black rounded text-center"
             >
-              + Add Brand
+              + Добавить бренд
             </Link>
           )}
         </div>
@@ -49,8 +49,8 @@ export default function BrandsPage() {
               <thead>
                 <tr>
                   <th className="p-2">ID</th>
-                  <th className="p-2">Name</th>
-                  <th className="p-2">Actions</th>
+                  <th className="p-2">Название</th>
+                  <th className="p-2">Действия</th>
                 </tr>
               </thead>
               <tbody>
@@ -60,7 +60,7 @@ export default function BrandsPage() {
                     <td className="p-2 border-b border-gray-700 sm:border-b-0">{b.name}</td>
                     <td className="p-2">
                       <Link href={`/brands/${b.id}`} className="px-2 py-1 bg-accent text-black rounded">
-                        View
+                        Просмотр
                       </Link>
                     </td>
                   </tr>

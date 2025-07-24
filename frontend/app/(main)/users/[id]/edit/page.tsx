@@ -53,7 +53,7 @@ export default function UserEditPage() {
         setRoles(rolesRes.data);
         setError('');
       })
-      .catch(() => setError('Failed to load data'))
+      .catch(() => setError('Не удалось загрузить данные'))
       .finally(() => setLoading(false));
   }, [params.id, canEdit]);
 
@@ -65,7 +65,7 @@ export default function UserEditPage() {
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!firstName || !lastName || !email) {
-      setError('All fields are required');
+      setError('Заполните все поля');
       return;
     }
     setSaving(true);
@@ -79,7 +79,7 @@ export default function UserEditPage() {
       });
       router.push(`/users/${params.id}`);
     } catch {
-      setError('Failed to save user');
+      setError('Не удалось сохранить пользователя');
     } finally {
       setSaving(false);
     }
@@ -88,7 +88,7 @@ export default function UserEditPage() {
   if (!canEdit) {
     return (
       <AuthGuard>
-        <p>You do not have permission to edit users.</p>
+        <p>У вас нет прав для редактирования пользователей.</p>
       </AuthGuard>
     );
   }
@@ -102,7 +102,7 @@ export default function UserEditPage() {
           <form onSubmit={onSubmit} className="space-y-4">
             {error && <p className="text-red-500">{error}</p>}
           <div>
-            <label className="block mb-1">First Name</label>
+            <label className="block mb-1">Имя</label>
             <input
               type="text"
               value={firstName}
@@ -112,7 +112,7 @@ export default function UserEditPage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Last Name</label>
+            <label className="block mb-1">Фамилия</label>
             <input
               type="text"
               value={lastName}
@@ -132,7 +132,7 @@ export default function UserEditPage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Roles</label>
+            <label className="block mb-1">Роли</label>
             <select
               multiple
               value={roleIds.map(String)}
@@ -151,7 +151,7 @@ export default function UserEditPage() {
             disabled={saving}
             className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? 'Сохранение...' : 'Сохранить изменения'}
           </button>
           </form>
         </div>

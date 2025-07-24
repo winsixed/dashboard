@@ -30,7 +30,7 @@ export default function RequestCreatePage() {
     api
       .get<ApiFlavor[]>('/flavors')
       .then(res => setFlavors(res.data))
-      .catch(() => setError('Failed to load flavors'))
+      .catch(() => setError('Не удалось загрузить вкусы'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -47,10 +47,10 @@ export default function RequestCreatePage() {
         quantity: Number(quantity),
         note,
       });
-      toast.success('Request created');
+      toast.success('Заявка создана');
       router.push(`/requests/${res.data.id}`);
     } catch (err) {
-      toast.error('Failed to create request');
+      toast.error('Не удалось создать заявку');
     } finally {
       setSaving(false);
     }
@@ -59,7 +59,7 @@ export default function RequestCreatePage() {
   if (!canCreate) {
     return (
       <AuthGuard>
-        <p>You do not have permission to create requests.</p>
+        <p>У вас нет прав для создания заявок.</p>
       </AuthGuard>
     );
   }
@@ -73,14 +73,14 @@ export default function RequestCreatePage() {
           <form onSubmit={onSubmit} className="space-y-4">
             {error && <p className="text-red-500">{error}</p>}
             <div>
-              <label className="block mb-1">Flavor</label>
+              <label className="block mb-1">Вкус</label>
               <select
                 value={flavorId}
                 onChange={e => setFlavorId(Number(e.target.value))}
                 className="w-full p-2 bg-[#1E1E1E] text-white rounded"
               >
                 <option value="" disabled>
-                  Select Flavor
+                  Выберите вкус
                 </option>
                 {flavors.map(f => (
                   <option key={f.id} value={f.id}>
@@ -90,7 +90,7 @@ export default function RequestCreatePage() {
               </select>
             </div>
             <div>
-              <label className="block mb-1">Quantity</label>
+              <label className="block mb-1">Количество</label>
               <input
                 type="number"
                 value={quantity}
@@ -99,7 +99,7 @@ export default function RequestCreatePage() {
               />
             </div>
             <div>
-              <label className="block mb-1">Note</label>
+              <label className="block mb-1">Комментарий</label>
               <input
                 type="text"
                 value={note}
@@ -113,7 +113,7 @@ export default function RequestCreatePage() {
                 disabled={saving}
                 className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50"
               >
-                {saving ? 'Saving...' : 'Create Request'}
+                {saving ? 'Сохранение...' : 'Создать заявку'}
               </button>
             </div>
           </form>
