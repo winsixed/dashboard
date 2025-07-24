@@ -4,6 +4,7 @@
   "scripts": {
     "start": "node dist/main.js",
     "dev": "nest start --watch",
+    "build": "nest build",
     "seed:permissions": "ts-node src/seed/permissions.seed.ts",
     "seed:admin": "ts-node src/seed/admin.seed.ts"
   },
