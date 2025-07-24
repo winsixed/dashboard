@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import Link from 'next/link';
 import AuthGuard from '../../../../components/AuthGuard';
 import Spinner from '../../../../components/Spinner';
 import StatusBadge from '../../../../components/StatusBadge';
@@ -67,6 +68,7 @@ export default function RequestDetailsPage() {
 
   const permissions = user?.permissions?.map((p: any) => p.code) || [];
   const canModerate = permissions.includes('requests:moderate');
+  const canEdit = permissions.includes('requests:edit');
 
   return (
     <AuthGuard>
@@ -110,26 +112,38 @@ export default function RequestDetailsPage() {
               </tbody>
             </table>
           </div>
-          {canModerate && (
+          {(canEdit || canModerate) && (
             <div className="space-x-2">
-              <button
-                onClick={approve}
-                className="px-4 py-2 bg-green-600 text-black rounded"
-              >
-                Approve
-              </button>
-              <button
-                onClick={reject}
-                className="px-4 py-2 bg-red-600 text-black rounded"
-              >
-                Reject
-              </button>
-              <button
-                onClick={remove}
-                className="px-4 py-2 bg-red-800 text-black rounded"
-              >
-                Delete
-              </button>
+              {canEdit && (
+                <Link
+                  href={`/requests/${request.id}/edit`}
+                  className="px-4 py-2 bg-accent text-black rounded"
+                >
+                  Edit
+                </Link>
+              )}
+              {canModerate && (
+                <>
+                  <button
+                    onClick={approve}
+                    className="px-4 py-2 bg-green-600 text-black rounded"
+                  >
+                    Approve
+                  </button>
+                  <button
+                    onClick={reject}
+                    className="px-4 py-2 bg-red-600 text-black rounded"
+                  >
+                    Reject
+                  </button>
+                  <button
+                    onClick={remove}
+                    className="px-4 py-2 bg-red-800 text-black rounded"
+                  >
+                    Delete
+                  </button>
+                </>
+              )}
             </div>
           )}
         </div>
