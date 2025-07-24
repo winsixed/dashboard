@@ -79,36 +79,38 @@ export default function DashboardPage() {
           </div>
           <div>
             <h2 className="text-xl font-bold mb-2">Latest Requests</h2>
-            <table className="w-full text-sm text-left bg-[#1E1E1E] rounded">
-              <thead>
-                <tr>
-                  <th className="p-2">ID</th>
-                  <th className="p-2">User</th>
-                  <th className="p-2">Status</th>
-                  <th className="p-2">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                {latestRequests.map(r => (
-                  <tr
-                    key={r.id}
-                    onClick={() => router.push(`/requests/${r.id}`)}
-                    className="border-t border-gray-700 cursor-pointer hover:bg-[#2A2A2A]"
-                  >
-                    <td className="p-2">{r.id}</td>
-                    <td className="p-2">
-                      {r.createdBy.firstName} {r.createdBy.lastName}
-                    </td>
-                    <td className="p-2">
-                      <StatusBadge status={r.status} />
-                    </td>
-                    <td className="p-2">
-                      {new Date(r.createdAt).toLocaleString()}
-                    </td>
+            <div className="overflow-x-auto">
+              <table className="w-full text-sm text-left bg-[#1E1E1E] rounded">
+                <thead>
+                  <tr>
+                    <th className="p-2">ID</th>
+                    <th className="p-2">User</th>
+                    <th className="p-2">Status</th>
+                    <th className="p-2">Date</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {latestRequests.map(r => (
+                    <tr
+                      key={r.id}
+                      onClick={() => router.push(`/requests/${r.id}`)}
+                      className="border-t border-gray-700 cursor-pointer hover:bg-[#2A2A2A]"
+                    >
+                      <td className="p-2">{r.id}</td>
+                      <td className="p-2">
+                        {r.createdBy.firstName} {r.createdBy.lastName}
+                      </td>
+                      <td className="p-2">
+                        <StatusBadge status={r.status} />
+                      </td>
+                      <td className="p-2">
+                        {new Date(r.createdAt).toLocaleString()}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
       )}
