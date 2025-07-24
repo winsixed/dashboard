@@ -75,42 +75,51 @@ export default function RequestDetailsPage() {
       {loading || !request ? (
         <Spinner />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-4 p-4 max-w-screen-sm mx-auto">
           {error && <p className="text-red-500">{error}</p>}
-          <div className="bg-[#1E1E1E] p-4 rounded">
+          <div className="bg-[#1E1E1E] p-4 rounded space-y-2 text-sm">
             <h1 className="text-xl font-bold mb-4">Request #{request.id}</h1>
-            <table className="w-full text-sm">
-              <tbody>
-                <tr>
-                  <td className="p-2 font-semibold">Status</td>
-                  <td className="p-2">
-                    <StatusBadge status={request.status} />
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-semibold">Created at</td>
-                  <td className="p-2">
-                    {new Date(request.createdAt).toLocaleString()}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-semibold">User</td>
-                  <td className="p-2">
-                    {request.createdBy.firstName} {request.createdBy.lastName}
-                  </td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-semibold">Comment</td>
-                  <td className="p-2">{request.comment || '-'}</td>
-                </tr>
-                <tr>
-                  <td className="p-2 font-semibold">Flavors</td>
-                  <td className="p-2">
-                    {request.flavors.map(f => f.name).join(', ')}
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <span className="font-semibold sm:w-32">ID</span>
+              <span className="mt-1 sm:mt-0">{request.id}</span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <span className="font-semibold sm:w-32">Status</span>
+              <div className="mt-1 sm:mt-0">
+                <StatusBadge status={request.status} />
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-start">
+              <span className="font-semibold sm:w-32">Flavors</span>
+              <div className="mt-1 sm:mt-0 flex flex-wrap gap-1">
+                {request.flavors.map(f => (
+                  <span
+                    key={f.id}
+                    className="bg-[#2A2A2A] px-2 py-0.5 rounded text-xs"
+                  >
+                    {f.name}
+                  </span>
+                ))}
+              </div>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <span className="font-semibold sm:w-32">Created by</span>
+              <span className="mt-1 sm:mt-0">
+                {request.createdBy.firstName} {request.createdBy.lastName}
+              </span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-center">
+              <span className="font-semibold sm:w-32">Created at</span>
+              <span className="mt-1 sm:mt-0">
+                {new Date(request.createdAt).toLocaleString()}
+              </span>
+            </div>
+            <div className="flex flex-col sm:flex-row sm:items-start">
+              <span className="font-semibold sm:w-32">Comment</span>
+              <span className="mt-1 sm:mt-0 break-words">
+                {request.comment || '-'}
+              </span>
+            </div>
           </div>
           {(canEdit || canModerate) && (
             <div className="space-x-2">
