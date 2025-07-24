@@ -49,46 +49,50 @@ export default function RequestsPage() {
     <AuthGuard>
       <div className="space-y-4">
         {canCreate && (
-          <Link
-            href="/requests/new"
-            className="px-3 py-2 bg-accent text-black rounded inline-block"
-          >
-            Create Request
-          </Link>
+          <div className="flex justify-end">
+            <Link
+              href="/requests/new"
+              className="w-full sm:w-auto px-3 py-2 bg-accent text-black rounded text-center"
+            >
+              Create Request
+            </Link>
+          </div>
         )}
         {loading ? (
           <Spinner />
         ) : (
-          <table className="w-full text-sm text-left bg-[#1E1E1E] rounded">
-            <thead>
-              <tr>
-                <th className="p-2">ID</th>
-                <th className="p-2">Created At</th>
-                <th className="p-2">Status</th>
-                <th className="p-2">User</th>
-                <th className="p-2">Flavors</th>
-              </tr>
-            </thead>
-            <tbody>
-              {requests.map(r => (
-                <tr
-                  key={r.id}
-                  onClick={() => router.push(`/requests/${r.id}`)}
-                  className="border-t border-gray-700 cursor-pointer hover:bg-[#2A2A2A]"
-                >
-                  <td className="p-2">{r.id}</td>
-                  <td className="p-2">{new Date(r.createdAt).toLocaleString()}</td>
-                  <td className="p-2">
-                    <StatusBadge status={r.status} />
-                  </td>
-                  <td className="p-2">
-                    {r.createdBy.firstName} {r.createdBy.lastName}
-                  </td>
-                  <td className="p-2">{r.flavors.map(f => f.name).join(', ')}</td>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm text-left bg-[#1E1E1E] rounded">
+              <thead>
+                <tr>
+                  <th className="p-2">ID</th>
+                  <th className="p-2">Created At</th>
+                  <th className="p-2">Status</th>
+                  <th className="p-2">User</th>
+                  <th className="p-2">Flavors</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {requests.map(r => (
+                  <tr
+                    key={r.id}
+                    onClick={() => router.push(`/requests/${r.id}`)}
+                    className="border-t border-gray-700 cursor-pointer hover:bg-[#2A2A2A] flex flex-col sm:table-row"
+                  >
+                    <td className="p-2">{r.id}</td>
+                    <td className="p-2">{new Date(r.createdAt).toLocaleString()}</td>
+                    <td className="p-2">
+                      <StatusBadge status={r.status} />
+                    </td>
+                    <td className="p-2">
+                      {r.createdBy.firstName} {r.createdBy.lastName}
+                    </td>
+                    <td className="p-2">{r.flavors.map(f => f.name).join(', ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </AuthGuard>
