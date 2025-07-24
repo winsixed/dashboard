@@ -4,7 +4,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "cypress": "cypress open"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.1.1",
@@ -23,6 +24,7 @@
     "@types/node": "24.0.15",
     "@types/react": "19.1.8",
     "autoprefixer": "^10.4.14",
+    "cypress": "^14.5.2",
     "postcss": "^8.4.21",
     "typescript": "5.8.3"
   }
