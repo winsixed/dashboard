@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, ParseIntPipe, Post, Put, UseGuards, Query } from '@nestjs/common';
 import { RequestsService } from './requests.service';
 import { CreateRequestDto } from './dto/create-request.dto';
 import { UpdateRequestDto } from './dto/update-request.dto';
@@ -14,8 +14,16 @@ export class RequestsController {
   @Get()
   @UseGuards(AuthGuard, PermissionsGuard)
   @Permission('view_requests')
-  list() {
-    return this.requests.list();
+  list(
+    @Query('status') status?: string,
+    @Query('brandId') brandId?: string,
+    @Query('sort') sort?: string,
+  ) {
+    return this.requests.list(
+      status as any,
+      brandId ? Number(brandId) : undefined,
+      sort,
+    );
   }
 
   @Post()
