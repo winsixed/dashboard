@@ -42,7 +42,7 @@ export default function BrandEditPage() {
     setSaving(true);
     setError('');
     try {
-      await api.put(`/brands/${params.id}`, { name });
+      await api.patch(`/brands/${params.id}`, { name });
       router.push(`/brands/${params.id}`);
     } catch (err) {
       setError('Failed to save brand');
