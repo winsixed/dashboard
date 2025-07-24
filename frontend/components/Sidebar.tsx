@@ -4,12 +4,12 @@ import { usePathname } from 'next/navigation';
 import clsx from 'clsx';
 
 const items = [
-  { href: '/dashboard', label: 'Dashboard' },
-  { href: '/requests', label: 'Requests' },
-  { href: '/users', label: 'Users' },
-  { href: '/roles', label: 'Roles' },
-  { href: '/inventory', label: 'Inventory' },
-  { href: '/audit-logs', label: 'Audit Logs' },
+  { href: '/dashboard', label: 'Дашборд' },
+  { href: '/requests', label: 'Заявки' },
+  { href: '/users', label: 'Пользователи' },
+  { href: '/roles', label: 'Роли' },
+  { href: '/inventory', label: 'Склад' },
+  { href: '/audit-logs', label: 'Журнал аудита' },
 ];
 
 interface SidebarProps {

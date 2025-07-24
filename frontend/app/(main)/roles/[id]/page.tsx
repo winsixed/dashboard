@@ -60,7 +60,7 @@ export default function RoleEditPage() {
       });
       fetchData();
     } catch (err) {
-      alert('Failed to save role');
+      alert('Не удалось сохранить роль');
     } finally {
       setSaving(false);
     }
@@ -74,7 +74,7 @@ export default function RoleEditPage() {
         <div className="p-4 max-w-screen-sm mx-auto">
           <form onSubmit={onSubmit} className="space-y-4">
             <div>
-              <label className="block mb-1">Name</label>
+              <label className="block mb-1">Название</label>
               <input
               type="text"
               value={name}
@@ -83,7 +83,7 @@ export default function RoleEditPage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Permissions</label>
+            <label className="block mb-1">Права</label>
             <div className="space-y-1">
               {permissions.map(p => (
                 <label key={p.id} className="flex items-center space-x-2">
@@ -102,7 +102,7 @@ export default function RoleEditPage() {
             disabled={saving}
             className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? 'Сохранение...' : 'Сохранить изменения'}
           </button>
           </form>
         </div>

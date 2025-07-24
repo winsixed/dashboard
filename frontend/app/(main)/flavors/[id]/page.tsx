@@ -32,7 +32,7 @@ export default function FlavorDetailsPage() {
         setFlavor(res.data);
         setError('');
       })
-      .catch(() => setError('Failed to load flavor'))
+      .catch(() => setError('Не удалось загрузить вкус'))
       .finally(() => setLoading(false));
   }, [params.id]);
 
@@ -54,15 +54,15 @@ export default function FlavorDetailsPage() {
               <table className="min-w-full text-sm">
                 <tbody>
                   <tr className="flex flex-col sm:table-row">
-                    <td className="p-2 font-semibold">Description</td>
+                    <td className="p-2 font-semibold">Описание</td>
                     <td className="p-2">{flavor.description || '-'}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
-                    <td className="p-2 font-semibold">Profile</td>
+                    <td className="p-2 font-semibold">Профиль</td>
                     <td className="p-2">{flavor.profile || '-'}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
-                    <td className="p-2 font-semibold">Brand</td>
+                    <td className="p-2 font-semibold">Бренд</td>
                     <td className="p-2">{flavor.brand.name}</td>
                   </tr>
                 </tbody>
@@ -76,26 +76,26 @@ export default function FlavorDetailsPage() {
                   href={`/flavors/${flavor.id}/edit`}
                   className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded text-center"
                 >
-                  Edit
+                  Редактировать
                 </Link>
               )}
               {canDelete && (
                 <button
                   onClick={async () => {
                     if (
-                      window.confirm('Are you sure you want to delete this flavor?')
+                      window.confirm('Вы уверены, что хотите удалить этот вкус?')
                     ) {
                       try {
                         await api.delete(`/flavors/${flavor.id}`);
                         router.push('/flavors');
                       } catch (err) {
-                        alert('Failed to delete flavor');
+                        alert('Не удалось удалить вкус');
                       }
                     }
                   }}
                   className="w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded"
                 >
-                  Delete
+                  Удалить
                 </button>
               )}
             </div>

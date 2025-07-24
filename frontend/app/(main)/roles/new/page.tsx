@@ -24,7 +24,7 @@ export default function RoleCreatePage() {
     api
       .get<ApiPermission[]>('/permissions')
       .then(res => setPermissions(res.data))
-      .catch(() => setError('Failed to load permissions'))
+      .catch(() => setError('Не удалось загрузить права'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -42,7 +42,7 @@ export default function RoleCreatePage() {
       await api.post('/roles', { name, permissionIds: selected });
       router.push('/roles');
     } catch (err) {
-      setError('Failed to create role');
+      setError('Не удалось создать роль');
     } finally {
       setSaving(false);
     }
@@ -57,7 +57,7 @@ export default function RoleCreatePage() {
           <form onSubmit={onSubmit} className="space-y-4">
             {error && <p className="text-red-500">{error}</p>}
           <div>
-            <label className="block mb-1">Name</label>
+            <label className="block mb-1">Название</label>
             <input
               type="text"
               value={name}
@@ -66,7 +66,7 @@ export default function RoleCreatePage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Permissions</label>
+            <label className="block mb-1">Права</label>
             <div className="space-y-1">
               {permissions.map(p => (
                 <label key={p.id} className="flex items-center space-x-2">
@@ -85,7 +85,7 @@ export default function RoleCreatePage() {
             disabled={saving}
             className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
-            {saving ? 'Saving...' : 'Create Role'}
+            {saving ? 'Сохранение...' : 'Создать роль'}
           </button>
           </form>
         </div>

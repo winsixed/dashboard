@@ -13,16 +13,16 @@ export default function TopBar({ onMenuClick }: TopBarProps) {
         <button
           onClick={onMenuClick}
           className="md:hidden focus:outline-none"
-          aria-label="Open menu"
+          aria-label="Открыть меню"
         >
           &#9776;
         </button>
-        <span>John Galt Panel</span>
+        <span>Панель John Galt</span>
       </div>
       <div className="flex items-center space-x-4">
         {user && <span>{user.name}</span>}
         <button onClick={logout} className="text-red-400 hover:underline">
-          Logout
+          Выйти
         </button>
       </div>
     </header>

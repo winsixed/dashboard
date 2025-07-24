@@ -28,7 +28,7 @@ export default function FlavorCreatePage() {
     api
       .get<ApiBrand[]>('/brands')
       .then(res => setBrands(res.data))
-      .catch(() => setError('Failed to load brands'))
+      .catch(() => setError('Не удалось загрузить бренды'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -48,7 +48,7 @@ export default function FlavorCreatePage() {
       });
       router.push(`/flavors/${res.data.id}`);
     } catch (err) {
-      setError('Failed to create flavor');
+      setError('Не удалось создать вкус');
     } finally {
       setSaving(false);
     }
@@ -57,7 +57,7 @@ export default function FlavorCreatePage() {
   if (!canCreate) {
     return (
       <AuthGuard>
-        <p>You do not have permission to create flavors.</p>
+        <p>У вас нет прав для создания вкусов.</p>
       </AuthGuard>
     );
   }
@@ -71,7 +71,7 @@ export default function FlavorCreatePage() {
           <form onSubmit={onSubmit} className="space-y-4">
             {error && <p className="text-red-500">{error}</p>}
           <div>
-            <label className="block mb-1">Name</label>
+            <label className="block mb-1">Название</label>
             <input
               type="text"
               value={name}
@@ -80,7 +80,7 @@ export default function FlavorCreatePage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Description</label>
+            <label className="block mb-1">Описание</label>
             <textarea
               value={description}
               onChange={e => setDescription(e.target.value)}
@@ -88,7 +88,7 @@ export default function FlavorCreatePage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Profile</label>
+            <label className="block mb-1">Профиль</label>
             <input
               type="text"
               value={profile}
@@ -97,14 +97,14 @@ export default function FlavorCreatePage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Brand</label>
+            <label className="block mb-1">Бренд</label>
             <select
               value={brandId}
               onChange={e => setBrandId(Number(e.target.value))}
               className="w-full p-2 bg-[#1E1E1E] rounded"
             >
               <option value="" disabled>
-                Select Brand
+                Выберите бренд
               </option>
               {brands.map(b => (
                 <option key={b.id} value={b.id}>
@@ -118,7 +118,7 @@ export default function FlavorCreatePage() {
             disabled={saving}
             className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
-            {saving ? 'Saving...' : 'Create Flavor'}
+            {saving ? 'Сохранение...' : 'Создать вкус'}
           </button>
           </form>
         </div>

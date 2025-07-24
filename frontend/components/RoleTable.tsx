@@ -14,9 +14,9 @@ export default function RoleTable({ roles }: { roles: Role[] }) {
         <thead>
           <tr>
             <th className="p-2">ID</th>
-            <th className="p-2">Name</th>
-            <th className="p-2">Permissions</th>
-            <th className="p-2">Actions</th>
+            <th className="p-2">Название</th>
+            <th className="p-2">Права</th>
+            <th className="p-2">Действия</th>
           </tr>
         </thead>
         <tbody>
@@ -27,7 +27,7 @@ export default function RoleTable({ roles }: { roles: Role[] }) {
               <td className="p-2">{role.permissions.map(p => p.code).join(', ')}</td>
               <td className="p-2">
                 <Link href={`/roles/${role.id}`} className="px-2 py-1 bg-accent text-black rounded">
-                  Edit
+                  Редактировать
                 </Link>
               </td>
             </tr>

@@ -16,10 +16,10 @@ export default function UserTable({ users }: { users: User[] }) {
         <thead>
           <tr>
             <th className="p-2">ID</th>
-            <th className="p-2">Full Name</th>
+            <th className="p-2">ФИО</th>
             <th className="p-2">Email</th>
-            <th className="p-2">Role</th>
-            <th className="p-2">Created At</th>
+            <th className="p-2">Роль</th>
+            <th className="p-2">Создан</th>
           </tr>
         </thead>
         <tbody>

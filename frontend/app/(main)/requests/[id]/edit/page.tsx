@@ -51,7 +51,7 @@ export default function RequestEditPage() {
         setFlavors(flavorsRes.data);
         setError('');
       })
-      .catch(() => setError('Failed to load data'))
+      .catch(() => setError('Не удалось загрузить данные'))
       .finally(() => setLoading(false));
   };
 
@@ -67,10 +67,10 @@ export default function RequestEditPage() {
         quantity: Number(quantity),
         note,
       });
-      toast.success('Request saved');
+      toast.success('Заявка сохранена');
       router.push(`/requests/${params.id}`);
     } catch (err) {
-      toast.error('Failed to save request');
+      toast.error('Не удалось сохранить заявку');
     } finally {
       setSaving(false);
     }
@@ -79,7 +79,7 @@ export default function RequestEditPage() {
   if (!canEdit) {
     return (
       <AuthGuard>
-        <p>You do not have permission to edit requests.</p>
+        <p>У вас нет прав для редактирования заявок.</p>
       </AuthGuard>
     );
   }
@@ -93,14 +93,14 @@ export default function RequestEditPage() {
           <form onSubmit={onSubmit} className="space-y-4">
             {error && <p className="text-red-500">{error}</p>}
             <div>
-              <label className="block mb-1">Flavor</label>
+              <label className="block mb-1">Вкус</label>
               <select
                 value={flavorId}
                 onChange={e => setFlavorId(Number(e.target.value))}
                 className="w-full p-2 bg-[#1E1E1E] text-white rounded"
               >
                 <option value="" disabled>
-                  Select Flavor
+                  Выберите вкус
                 </option>
                 {flavors.map(f => (
                   <option key={f.id} value={f.id}>
@@ -110,7 +110,7 @@ export default function RequestEditPage() {
               </select>
             </div>
             <div>
-              <label className="block mb-1">Quantity</label>
+              <label className="block mb-1">Количество</label>
               <input
                 type="number"
                 value={quantity}
@@ -119,7 +119,7 @@ export default function RequestEditPage() {
               />
             </div>
             <div>
-              <label className="block mb-1">Note</label>
+              <label className="block mb-1">Комментарий</label>
               <input
                 type="text"
                 value={note}
@@ -133,7 +133,7 @@ export default function RequestEditPage() {
                 disabled={saving}
                 className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50"
               >
-                {saving ? 'Saving...' : 'Save Changes'}
+                {saving ? 'Сохранение...' : 'Сохранить изменения'}
               </button>
             </div>
           </form>

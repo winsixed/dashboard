@@ -53,7 +53,7 @@ export default function FlavorEditPage() {
         setBrands(brandsRes.data);
         setError('');
       })
-      .catch(() => setError('Failed to load data'))
+      .catch(() => setError('Не удалось загрузить данные'))
       .finally(() => setLoading(false));
   };
 
@@ -72,7 +72,7 @@ export default function FlavorEditPage() {
       });
       router.push(`/flavors/${params.id}`);
     } catch (err) {
-      setError('Failed to save flavor');
+      setError('Не удалось сохранить вкус');
     } finally {
       setSaving(false);
     }
@@ -81,7 +81,7 @@ export default function FlavorEditPage() {
   if (!canEdit) {
     return (
       <AuthGuard>
-        <p>You do not have permission to edit flavors.</p>
+        <p>У вас нет прав для редактирования вкусов.</p>
       </AuthGuard>
     );
   }
@@ -95,7 +95,7 @@ export default function FlavorEditPage() {
           <form onSubmit={onSubmit} className="space-y-4">
             {error && <p className="text-red-500">{error}</p>}
           <div>
-            <label className="block mb-1">Name</label>
+            <label className="block mb-1">Название</label>
             <input
               type="text"
               value={name}
@@ -104,7 +104,7 @@ export default function FlavorEditPage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Description</label>
+            <label className="block mb-1">Описание</label>
             <input
               type="text"
               value={description}
@@ -113,7 +113,7 @@ export default function FlavorEditPage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Profile</label>
+            <label className="block mb-1">Профиль</label>
             <input
               type="text"
               value={profile}
@@ -122,14 +122,14 @@ export default function FlavorEditPage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Brand</label>
+            <label className="block mb-1">Бренд</label>
             <select
               value={brandId}
               onChange={e => setBrandId(Number(e.target.value))}
               className="w-full p-2 bg-[#1E1E1E] rounded"
             >
               <option value="" disabled>
-                Select Brand
+                Выберите бренд
               </option>
               {brands.map(b => (
                 <option key={b.id} value={b.id}>
@@ -143,7 +143,7 @@ export default function FlavorEditPage() {
             disabled={saving}
             className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
-            {saving ? 'Saving...' : 'Save Changes'}
+            {saving ? 'Сохранение...' : 'Сохранить изменения'}
           </button>
           </form>
         </div>

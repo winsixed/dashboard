@@ -60,7 +60,7 @@ export default function DashboardPage() {
   if (!canView) {
     return (
       <AuthGuard>
-        <p>You do not have permission to view the dashboard.</p>
+        <p>У вас нет прав для просмотра дашборда.</p>
       </AuthGuard>
     );
   }
@@ -71,22 +71,22 @@ export default function DashboardPage() {
         <Spinner />
       ) : (
         <div className="space-y-6 p-4 max-w-screen-xl mx-auto">
-          <h1 className="text-2xl font-bold">Dashboard</h1>
+          <h1 className="text-2xl font-bold">Дашборд</h1>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card title="Requests" value={requestStats?.total ?? 0} />
-            <Card title="Flavors" value={flavorsTotal} />
-            <Card title="Users" value={usersTotal} />
+            <Card title="Заявки" value={requestStats?.total ?? 0} />
+            <Card title="Вкусы" value={flavorsTotal} />
+            <Card title="Пользователи" value={usersTotal} />
           </div>
           <div>
-            <h2 className="text-xl font-bold mb-2">Latest Requests</h2>
+            <h2 className="text-xl font-bold mb-2">Последние заявки</h2>
             <div className="overflow-x-auto">
               <table className="min-w-full text-sm text-left bg-[#1E1E1E] rounded">
                 <thead>
                   <tr>
                     <th className="p-2">ID</th>
-                    <th className="p-2">User</th>
-                    <th className="p-2">Status</th>
-                    <th className="p-2">Date</th>
+                    <th className="p-2">Пользователь</th>
+                    <th className="p-2">Статус</th>
+                    <th className="p-2">Дата</th>
                   </tr>
                 </thead>
                 <tbody>

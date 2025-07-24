@@ -32,7 +32,7 @@ export default function UserCreatePage() {
     api
       .get<ApiRole[]>('/roles')
       .then(res => setRoles(res.data))
-      .catch(() => setError('Failed to load roles'))
+      .catch(() => setError('Не удалось загрузить роли'))
       .finally(() => setLoading(false));
   }, []);
 
@@ -50,7 +50,7 @@ export default function UserCreatePage() {
       });
       router.push('/users');
     } catch (err) {
-      setError('Failed to create user');
+      setError('Не удалось создать пользователя');
     } finally {
       setSaving(false);
     }
@@ -59,7 +59,7 @@ export default function UserCreatePage() {
   if (!canCreate) {
     return (
       <AuthGuard>
-        <p>You do not have permission to create users.</p>
+        <p>У вас нет прав для создания пользователей.</p>
       </AuthGuard>
     );
   }
@@ -73,7 +73,7 @@ export default function UserCreatePage() {
           <form onSubmit={onSubmit} className="space-y-4">
             {error && <p className="text-red-500">{error}</p>}
           <div>
-            <label className="block mb-1">First Name</label>
+            <label className="block mb-1">Имя</label>
             <input
               type="text"
               value={firstName}
@@ -82,7 +82,7 @@ export default function UserCreatePage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Last Name</label>
+            <label className="block mb-1">Фамилия</label>
             <input
               type="text"
               value={lastName}
@@ -100,7 +100,7 @@ export default function UserCreatePage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Password</label>
+            <label className="block mb-1">Пароль</label>
             <input
               type="password"
               value={password}
@@ -109,14 +109,14 @@ export default function UserCreatePage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Role</label>
+            <label className="block mb-1">Роль</label>
             <select
               value={roleId}
               onChange={e => setRoleId(Number(e.target.value))}
               className="w-full p-2 bg-[#1E1E1E] rounded"
             >
               <option value="" disabled>
-                Select Role
+                Выберите роль
               </option>
               {roles.map(r => (
                 <option key={r.id} value={r.id}>
@@ -130,7 +130,7 @@ export default function UserCreatePage() {
             disabled={saving}
             className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
-            {saving ? 'Saving...' : 'Create User'}
+            {saving ? 'Сохранение...' : 'Создать пользователя'}
           </button>
           </form>
         </div>

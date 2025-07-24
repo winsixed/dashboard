@@ -40,7 +40,7 @@ export default function RequestsPage() {
   if (!canView) {
     return (
       <AuthGuard>
-        <p>You do not have permission to view requests.</p>
+        <p>У вас нет прав для просмотра заявок.</p>
       </AuthGuard>
     );
   }
@@ -54,7 +54,7 @@ export default function RequestsPage() {
               href="/requests/new"
               className="w-full sm:w-auto px-3 py-2 bg-accent text-black rounded text-center"
             >
-              Create Request
+              Создать заявку
             </Link>
           </div>
         )}
@@ -66,10 +66,10 @@ export default function RequestsPage() {
               <thead>
                 <tr>
                   <th className="p-2">ID</th>
-                  <th className="p-2">Created At</th>
-                  <th className="p-2">Status</th>
-                  <th className="p-2">User</th>
-                  <th className="p-2">Flavors</th>
+                  <th className="p-2">Создано</th>
+                  <th className="p-2">Статус</th>
+                  <th className="p-2">Пользователь</th>
+                  <th className="p-2">Вкусы</th>
                 </tr>
               </thead>
               <tbody>

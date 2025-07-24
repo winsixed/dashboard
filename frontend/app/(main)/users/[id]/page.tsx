@@ -37,14 +37,14 @@ export default function UserDetailsPage() {
         setData(res.data);
         setError('');
       })
-      .catch(() => setError('Failed to load user'))
+      .catch(() => setError('Не удалось загрузить пользователя'))
       .finally(() => setLoading(false));
   }, [params.id, canView]);
 
   if (!canView) {
     return (
       <AuthGuard>
-        <p>You do not have permission to view this user.</p>
+        <p>У вас нет прав для просмотра этого пользователя.</p>
       </AuthGuard>
     );
   }
@@ -69,11 +69,11 @@ export default function UserDetailsPage() {
                     <td className="p-2">{data.id}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
-                    <td className="p-2 font-semibold">First Name</td>
+                    <td className="p-2 font-semibold">Имя</td>
                     <td className="p-2">{data.firstName}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
-                    <td className="p-2 font-semibold">Last Name</td>
+                    <td className="p-2 font-semibold">Фамилия</td>
                     <td className="p-2">{data.lastName}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
@@ -81,11 +81,11 @@ export default function UserDetailsPage() {
                     <td className="p-2">{data.email}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
-                    <td className="p-2 font-semibold">Roles</td>
+                    <td className="p-2 font-semibold">Роли</td>
                     <td className="p-2">{data.roles.map(r => r.name).join(', ')}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
-                    <td className="p-2 font-semibold">Created At</td>
+                    <td className="p-2 font-semibold">Создан</td>
                     <td className="p-2">{data.createdAt ? new Date(data.createdAt).toLocaleString() : ''}</td>
                   </tr>
                 </tbody>
@@ -94,7 +94,7 @@ export default function UserDetailsPage() {
           </div>
           {canEdit && (
             <Link href={`/users/${data.id}/edit`} className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded block text-center">
-              Edit
+              Редактировать
             </Link>
           )}
         </div>
