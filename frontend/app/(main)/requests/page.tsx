@@ -1,12 +1,14 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
-import AuthGuard from "../../../components/AuthGuard";
-import Spinner from "../../../components/Spinner";
-import StatusBadge from "../../../components/StatusBadge";
-import api from "../../../lib/api";
+import AuthGuard from '../../../components/AuthGuard';
+import Spinner from '../../../components/Spinner';
+import StatusBadge from '../../../components/StatusBadge';
+import api from '../../../lib/api';
+import { useAuth } from '../../../context/AuthContext';
 
 interface ApiRequest {
   id: number;
@@ -17,19 +19,43 @@ interface ApiRequest {
 }
 
 export default function RequestsPage() {
+  const router = useRouter();
+  const { user } = useAuth();
   const [requests, setRequests] = useState<ApiRequest[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const permissions = user?.permissions?.map((p: any) => p.code) || [];
+  const canView = permissions.includes('requests:view');
+  const canCreate = permissions.includes('requests:create');
+
   useEffect(() => {
+    if (!canView) return;
+    setLoading(true);
     api
-      .get<ApiRequest[]>("/requests")
-      .then((res) => setRequests(res.data))
+      .get<ApiRequest[]>('/requests')
+      .then(res => setRequests(res.data))
       .finally(() => setLoading(false));
-  }, []);
+  }, [canView]);
+
+  if (!canView) {
+    return (
+      <AuthGuard>
+        <p>You do not have permission to view requests.</p>
+      </AuthGuard>
+    );
+  }
 
   return (
     <AuthGuard>
       <div className="space-y-4">
+        {canCreate && (
+          <Link
+            href="/requests/new"
+            className="px-3 py-2 bg-accent text-black rounded inline-block"
+          >
+            Create Request
+          </Link>
+        )}
         {loading ? (
           <Spinner />
         ) : (
@@ -37,33 +63,28 @@ export default function RequestsPage() {
             <thead>
               <tr>
                 <th className="p-2">ID</th>
-                <th className="p-2">Status</th>
                 <th className="p-2">Created At</th>
+                <th className="p-2">Status</th>
                 <th className="p-2">User</th>
                 <th className="p-2">Flavors</th>
-                <th className="p-2">Actions</th>
               </tr>
             </thead>
             <tbody>
-              {requests.map((r) => (
-                <tr key={r.id} className="border-t border-gray-700">
+              {requests.map(r => (
+                <tr
+                  key={r.id}
+                  onClick={() => router.push(`/requests/${r.id}`)}
+                  className="border-t border-gray-700 cursor-pointer hover:bg-[#2A2A2A]"
+                >
                   <td className="p-2">{r.id}</td>
+                  <td className="p-2">{new Date(r.createdAt).toLocaleString()}</td>
                   <td className="p-2">
                     <StatusBadge status={r.status} />
                   </td>
-                  <td className="p-2">{new Date(r.createdAt).toLocaleString()}</td>
                   <td className="p-2">
                     {r.createdBy.firstName} {r.createdBy.lastName}
                   </td>
-                  <td className="p-2">{r.flavors.map((f) => f.name).join(", ")}</td>
-                  <td className="p-2">
-                    <Link
-                      href={`/requests/${r.id}`}
-                      className="px-2 py-1 bg-accent text-black rounded"
-                    >
-                      View
-                    </Link>
-                  </td>
+                  <td className="p-2">{r.flavors.map(f => f.name).join(', ')}</td>
                 </tr>
               ))}
             </tbody>
