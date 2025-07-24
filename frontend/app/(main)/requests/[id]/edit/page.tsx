@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import AuthGuard from '../../../../../components/AuthGuard';
 import Spinner from '../../../../../components/Spinner';
 import api from '../../../../../lib/api';
@@ -66,9 +67,10 @@ export default function RequestEditPage() {
         quantity: Number(quantity),
         note,
       });
+      toast.success('Request saved');
       router.push(`/requests/${params.id}`);
     } catch (err) {
-      setError('Failed to save request');
+      toast.error('Failed to save request');
     } finally {
       setSaving(false);
     }

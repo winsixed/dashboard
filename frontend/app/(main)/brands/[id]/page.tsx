@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import Link from 'next/link';
 import AuthGuard from '../../../../components/AuthGuard';
 import Spinner from '../../../../components/Spinner';
@@ -75,9 +76,10 @@ export default function BrandDetailsPage() {
                         if (window.confirm('Are you sure you want to delete this brand?')) {
                           try {
                             await api.delete(`/brands/${brand.id}`);
+                            toast.success('Brand deleted');
                             router.push('/brands');
                           } catch (err) {
-                            alert('Failed to delete brand');
+                            toast.error('Failed to delete brand');
                           }
                         }
                       }}
