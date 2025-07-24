@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import AuthGuard from '../../../../components/AuthGuard';
 import Spinner from '../../../../components/Spinner';
 import api from '../../../../lib/api';
+import { useAuth } from '../../../../context/AuthContext';
 
 interface ApiRole {
   id: number;
@@ -13,6 +14,7 @@ interface ApiRole {
 
 export default function UserCreatePage() {
   const router = useRouter();
+  const { user } = useAuth();
   const [roles, setRoles] = useState<ApiRole[]>([]);
   const [firstName, setFirstName] = useState('');
   const [lastName, setLastName] = useState('');
@@ -22,6 +24,9 @@ export default function UserCreatePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
+
+  const permissions = user?.permissions?.map((p: any) => p.code) || [];
+  const canCreate = permissions.includes('users:create');
 
   useEffect(() => {
     api
@@ -50,6 +55,14 @@ export default function UserCreatePage() {
       setSaving(false);
     }
   };
+
+  if (!canCreate) {
+    return (
+      <AuthGuard>
+        <p>You do not have permission to create users.</p>
+      </AuthGuard>
+    );
+  }
 
   return (
     <AuthGuard>
