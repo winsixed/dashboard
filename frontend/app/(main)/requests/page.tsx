@@ -18,10 +18,20 @@ interface ApiRequest {
   flavors: { id: number; name: string }[];
 }
 
+interface ApiBrand {
+  id: number;
+  name: string;
+}
+
 export default function RequestsPage() {
   const router = useRouter();
   const { user } = useAuth();
   const [requests, setRequests] = useState<ApiRequest[]>([]);
+  const [brands, setBrands] = useState<ApiBrand[]>([]);
+  const [status, setStatus] = useState<string>('');
+  const [brandId, setBrandId] = useState<string>('');
+  const [date, setDate] = useState<string>('');
+  const [sort, setSort] = useState<string>('createdAt_desc');
   const [loading, setLoading] = useState(true);
 
   const permissions = user?.permissions?.map((p: any) => p.code) || [];
@@ -29,13 +39,57 @@ export default function RequestsPage() {
   const canCreate = permissions.includes('requests:create');
 
   useEffect(() => {
+    api.get<ApiBrand[]>('/brands').then(res => setBrands(res.data));
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    setStatus(params.get('status') || '');
+    setBrandId(params.get('brandId') || '');
+    setDate(params.get('date') || '');
+    setSort(params.get('sort') || 'createdAt_desc');
+  }, []);
+
+  useEffect(() => {
+    const params = new URLSearchParams();
+    if (status) params.set('status', status);
+    if (brandId) params.set('brandId', brandId);
+    if (date) params.set('date', date);
+    if (sort) params.set('sort', sort);
+    router.replace(`/requests?${params.toString()}`);
+  }, [status, brandId, date, sort, router]);
+
+  useEffect(() => {
     if (!canView) return;
     setLoading(true);
     api
-      .get<ApiRequest[]>('/requests')
-      .then(res => setRequests(res.data))
+      .get<ApiRequest[]>('/requests', {
+        params: {
+          status: status || undefined,
+          brandId: brandId || undefined,
+          date: date || undefined,
+          sort: sort || undefined,
+        },
+      })
+      .then(res => {
+        let data = res.data;
+        if (sort === 'flavor_asc') {
+          data = [...data].sort((a, b) => {
+            const an = a.flavors[0]?.name || '';
+            const bn = b.flavors[0]?.name || '';
+            return an.localeCompare(bn, 'ru');
+          });
+        } else if (sort === 'flavor_desc') {
+          data = [...data].sort((a, b) => {
+            const an = a.flavors[0]?.name || '';
+            const bn = b.flavors[0]?.name || '';
+            return bn.localeCompare(an, 'ru');
+          });
+        }
+        setRequests(data);
+      })
       .finally(() => setLoading(false));
-  }, [canView]);
+  }, [status, brandId, date, sort, canView]);
 
   if (!canView) {
     return (
@@ -47,17 +101,55 @@ export default function RequestsPage() {
 
   return (
     <AuthGuard>
-      <div className="space-y-4">
-        {canCreate && (
-          <div className="flex justify-end">
+      <div className="space-y-4 p-4 max-w-screen-xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 space-y-2 sm:space-y-0">
+          <select
+            value={status}
+            onChange={e => setStatus(e.target.value)}
+            className="bg-[#1E1E1E] p-2 rounded w-full sm:w-auto"
+          >
+            <option value="">Все статусы</option>
+            <option value="pending">Новые</option>
+            <option value="approved">Одобренные</option>
+            <option value="rejected">Отклонённые</option>
+          </select>
+          <select
+            value={brandId}
+            onChange={e => setBrandId(e.target.value)}
+            className="bg-[#1E1E1E] p-2 rounded w-full sm:w-auto"
+          >
+            <option value="">Все бренды</option>
+            {brands.map(b => (
+              <option key={b.id} value={b.id}>
+                {b.name}
+              </option>
+            ))}
+          </select>
+          <input
+            type="date"
+            value={date}
+            onChange={e => setDate(e.target.value)}
+            className="bg-[#1E1E1E] p-2 rounded w-full sm:w-auto"
+          />
+          <select
+            value={sort}
+            onChange={e => setSort(e.target.value)}
+            className="bg-[#1E1E1E] p-2 rounded w-full sm:w-auto"
+          >
+            <option value="createdAt_desc">Дата ↓</option>
+            <option value="createdAt_asc">Дата ↑</option>
+            <option value="flavor_asc">Вкус A→Я</option>
+            <option value="flavor_desc">Вкус Я→A</option>
+          </select>
+          {canCreate && (
             <Link
               href="/requests/new"
-              className="w-full sm:w-auto px-3 py-2 bg-accent text-black rounded text-center"
+              className="w-full sm:w-auto sm:ml-auto px-3 py-2 bg-accent text-black rounded text-center"
             >
               Создать заявку
             </Link>
-          </div>
-        )}
+          )}
+        </div>
         {loading ? (
           <Spinner />
         ) : (

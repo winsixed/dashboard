@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { Prisma, RequestStatus } from '@prisma/client';
 import { PrismaService } from '../prisma.service';
 import { AuditService } from '../audit/audit.service';
 import { CreateRequestDto } from './dto/create-request.dto';
@@ -8,14 +9,33 @@ import { UpdateRequestDto } from './dto/update-request.dto';
 export class RequestsService {
   constructor(private prisma: PrismaService, private audit: AuditService) {}
 
-  async list() {
+  async list(
+    status?: RequestStatus,
+    brandId?: number,
+    sort?: string,
+  ) {
+    const where: Prisma.RequestWhereInput = {};
+    if (status) {
+      where.status = status;
+    }
+    if (brandId) {
+      where.flavors = { some: { flavor: { brandId } } };
+    }
+
+    const orderBy: Prisma.RequestOrderByWithRelationInput[] = [];
+    if (sort === 'createdAt_asc') orderBy.push({ createdAt: 'asc' });
+    if (sort === 'createdAt_desc') orderBy.push({ createdAt: 'desc' });
+
     const requests = await this.prisma.request.findMany({
+      where,
       include: {
         createdBy: { select: { id: true, firstName: true, lastName: true } },
-        flavors: { include: { flavor: { select: { id: true, name: true } } } },
+        flavors: { include: { flavor: { select: { id: true, name: true, brandId: true } } } },
       },
+      orderBy: orderBy.length > 0 ? orderBy : undefined,
     });
-    return requests.map(r => ({
+
+    const result = requests.map(r => ({
       id: r.id,
       status: r.status,
       comment: r.comment,
@@ -23,6 +43,22 @@ export class RequestsService {
       createdBy: r.createdBy,
       flavors: r.flavors.map(f => f.flavor),
     }));
+
+    if (sort === 'flavor_asc') {
+      result.sort((a, b) => {
+        const an = a.flavors[0]?.name || '';
+        const bn = b.flavors[0]?.name || '';
+        return an.localeCompare(bn, 'ru');
+      });
+    } else if (sort === 'flavor_desc') {
+      result.sort((a, b) => {
+        const an = a.flavors[0]?.name || '';
+        const bn = b.flavors[0]?.name || '';
+        return bn.localeCompare(an, 'ru');
+      });
+    }
+
+    return result;
   }
 
   async create(dto: CreateRequestDto, userId: number) {
