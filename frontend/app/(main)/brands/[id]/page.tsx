@@ -91,24 +91,26 @@ export default function BrandDetailsPage() {
             </div>
             <h2 className="text-lg font-semibold mb-2">Flavors</h2>
             {flavors.length > 0 ? (
-              <table className="w-full text-sm">
-                <thead>
-                  <tr>
-                    <th className="p-2 text-left">Name</th>
-                    <th className="p-2 text-left">Description</th>
-                    <th className="p-2 text-left">Profile</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {flavors.map(f => (
-                    <tr key={f.id} className="border-t border-gray-700">
-                      <td className="p-2">{f.name}</td>
-                      <td className="p-2">{f.description || '-'}</td>
-                      <td className="p-2">{f.profile || '-'}</td>
+              <div className="overflow-x-auto">
+                <table className="min-w-full text-sm">
+                  <thead>
+                    <tr>
+                      <th className="p-2 text-left">Name</th>
+                      <th className="p-2 text-left">Description</th>
+                      <th className="p-2 text-left">Profile</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
+                  </thead>
+                  <tbody>
+                    {flavors.map(f => (
+                      <tr key={f.id} className="border-t border-gray-700 flex flex-col sm:table-row">
+                        <td className="p-2">{f.name}</td>
+                        <td className="p-2">{f.description || '-'}</td>
+                        <td className="p-2">{f.profile || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
             ) : (
               <p>No flavors found</p>
             )}

@@ -38,28 +38,32 @@ export default function UsersPage() {
       ) : loading ? (
         <Spinner />
       ) : (
-        <table className="w-full text-sm text-left bg-[#1E1E1E] text-white rounded">
-          <thead>
-            <tr>
-              <th className="p-2">ID</th>
-              <th className="p-2">First Name</th>
-              <th className="p-2">Last Name</th>
-              <th className="p-2">Email</th>
-              <th className="p-2">Roles</th>
-            </tr>
-          </thead>
-          <tbody>
-            {users.map(u => (
-              <tr key={u.id} className="border-t border-gray-700">
-                <td className="p-2">{u.id}</td>
-                <td className="p-2">{u.firstName}</td>
-                <td className="p-2">{u.lastName}</td>
-                <td className="p-2">{u.email}</td>
-                <td className="p-2">{u.roles.map(r => r.name).join(', ')}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+        <div className="p-4 max-w-screen-md mx-auto">
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm text-left bg-[#1E1E1E] text-white rounded">
+              <thead>
+                <tr>
+                  <th className="p-2">ID</th>
+                  <th className="p-2">First Name</th>
+                  <th className="p-2">Last Name</th>
+                  <th className="p-2">Email</th>
+                  <th className="p-2">Roles</th>
+                </tr>
+              </thead>
+              <tbody>
+                {users.map(u => (
+                  <tr key={u.id} className="border-t border-gray-700 flex flex-col sm:table-row">
+                    <td className="p-2">{u.id}</td>
+                    <td className="p-2">{u.firstName}</td>
+                    <td className="p-2">{u.lastName}</td>
+                    <td className="p-2">{u.email}</td>
+                    <td className="p-2">{u.roles.map(r => r.name).join(', ')}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
       )}
     </AuthGuard>
   );

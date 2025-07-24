@@ -61,19 +61,19 @@ export default function FlavorsPage() {
 
   return (
     <AuthGuard>
-      <div className="space-y-4">
-        <div className="flex space-x-2 items-center">
+      <div className="space-y-4 p-4 max-w-screen-xl mx-auto">
+        <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 space-y-2 sm:space-y-0">
           <input
             type="text"
             placeholder="Search"
             value={search}
             onChange={e => setSearch(e.target.value)}
-            className="bg-[#1E1E1E] p-2 rounded w-64"
+            className="bg-[#1E1E1E] p-2 rounded w-full sm:w-64"
           />
           <select
             value={brandId}
             onChange={e => setBrandId(e.target.value ? Number(e.target.value) : '')}
-            className="bg-[#1E1E1E] p-2 rounded"
+            className="bg-[#1E1E1E] p-2 rounded w-full sm:w-auto"
           >
             <option value="">All Brands</option>
             {brands.map(b => (
@@ -83,7 +83,7 @@ export default function FlavorsPage() {
             ))}
           </select>
           {canCreate && (
-            <Link href="/flavors/new" className="ml-auto px-3 py-2 bg-accent text-black rounded">
+            <Link href="/flavors/new" className="w-full sm:w-auto sm:ml-auto px-3 py-2 bg-accent text-black rounded text-center">
               + Add Flavor
             </Link>
           )}
@@ -91,18 +91,19 @@ export default function FlavorsPage() {
         {loading ? (
           <Spinner />
         ) : (
-          <table className="w-full text-sm text-left bg-[#1E1E1E] rounded">
-            <thead>
-              <tr>
-                <th className="p-2">Name</th>
-                <th className="p-2">Profile</th>
-                <th className="p-2">Brand</th>
-                <th className="p-2">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
+          <div className="overflow-x-auto">
+            <table className="min-w-full text-sm text-left bg-[#1E1E1E] rounded">
+              <thead>
+                <tr>
+                  <th className="p-2">Name</th>
+                  <th className="p-2">Profile</th>
+                  <th className="p-2">Brand</th>
+                  <th className="p-2">Actions</th>
+                </tr>
+              </thead>
+              <tbody>
               {flavors.map(f => (
-                <tr key={f.id} className="border-t border-gray-700">
+                <tr key={f.id} className="border-t border-gray-700 flex flex-col sm:table-row">
                   <td className="p-2">{f.name}</td>
                   <td className="p-2">{f.profile || '-'}</td>
                   <td className="p-2">{f.brand.name}</td>
@@ -113,8 +114,9 @@ export default function FlavorsPage() {
                   </td>
                 </tr>
               ))}
-            </tbody>
-          </table>
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </AuthGuard>

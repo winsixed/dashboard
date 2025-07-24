@@ -71,10 +71,11 @@ export default function RoleEditPage() {
       {loading || !role ? (
         <Spinner />
       ) : (
-        <form onSubmit={onSubmit} className="space-y-4 max-w-md">
-          <div>
-            <label className="block mb-1">Name</label>
-            <input
+        <div className="p-4 max-w-screen-sm mx-auto">
+          <form onSubmit={onSubmit} className="space-y-4">
+            <div>
+              <label className="block mb-1">Name</label>
+              <input
               type="text"
               value={name}
               onChange={e => setName(e.target.value)}
@@ -99,11 +100,12 @@ export default function RoleEditPage() {
           <button
             type="submit"
             disabled={saving}
-            className="px-4 py-2 bg-accent text-black rounded disabled:opacity-50"
+            className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
             {saving ? 'Saving...' : 'Save Changes'}
           </button>
-        </form>
+          </form>
+        </div>
       )}
     </AuthGuard>
   );

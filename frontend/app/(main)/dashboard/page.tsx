@@ -70,7 +70,7 @@ export default function DashboardPage() {
       {loading ? (
         <Spinner />
       ) : (
-        <div className="space-y-6">
+        <div className="space-y-6 p-4 max-w-screen-xl mx-auto">
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <Card title="Requests" value={requestStats?.total ?? 0} />
@@ -80,7 +80,7 @@ export default function DashboardPage() {
           <div>
             <h2 className="text-xl font-bold mb-2">Latest Requests</h2>
             <div className="overflow-x-auto">
-              <table className="w-full text-sm text-left bg-[#1E1E1E] rounded">
+              <table className="min-w-full text-sm text-left bg-[#1E1E1E] rounded">
                 <thead>
                   <tr>
                     <th className="p-2">ID</th>
@@ -94,7 +94,7 @@ export default function DashboardPage() {
                     <tr
                       key={r.id}
                       onClick={() => router.push(`/requests/${r.id}`)}
-                      className="border-t border-gray-700 cursor-pointer hover:bg-[#2A2A2A]"
+                      className="border-t border-gray-700 cursor-pointer hover:bg-[#2A2A2A] flex flex-col sm:table-row"
                     >
                       <td className="p-2">{r.id}</td>
                       <td className="p-2">
