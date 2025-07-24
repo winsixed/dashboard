@@ -69,8 +69,9 @@ export default function UserCreatePage() {
       {loading ? (
         <Spinner />
       ) : (
-        <form onSubmit={onSubmit} className="space-y-4 max-w-md">
-          {error && <p className="text-red-500">{error}</p>}
+        <div className="p-4 max-w-screen-sm mx-auto">
+          <form onSubmit={onSubmit} className="space-y-4">
+            {error && <p className="text-red-500">{error}</p>}
           <div>
             <label className="block mb-1">First Name</label>
             <input
@@ -127,11 +128,12 @@ export default function UserCreatePage() {
           <button
             type="submit"
             disabled={saving}
-            className="px-4 py-2 bg-accent text-black rounded disabled:opacity-50"
+            className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50 block mx-auto"
           >
             {saving ? 'Saving...' : 'Create User'}
           </button>
-        </form>
+          </form>
+        </div>
       )}
     </AuthGuard>
   );

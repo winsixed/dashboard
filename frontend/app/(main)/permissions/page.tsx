@@ -24,7 +24,7 @@ export default function PermissionsPage() {
 
   return (
     <AuthGuard>
-      <div className="space-y-4">
+      <div className="space-y-4 p-4 max-w-screen-md mx-auto">
         {loading ? <Spinner /> : <PermissionTable permissions={permissions} />}
       </div>
     </AuthGuard>
