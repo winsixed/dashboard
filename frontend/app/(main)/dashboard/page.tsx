@@ -1,119 +1,137 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
+import {
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Legend,
+} from 'recharts';
 import AuthGuard from '../../../components/AuthGuard';
 import Spinner from '../../../components/Spinner';
-import Card from '../../../components/Card';
-import StatusBadge from '../../../components/StatusBadge';
 import api from '../../../lib/api';
-import { useAuth } from '../../../context/AuthContext';
 
-interface RequestStats {
-  total: number;
-  pending: number;
-  approved: number;
-  rejected: number;
+interface ApiFlavor {
+  id: number;
+  brandId: number;
+  profile: string | null;
 }
 
-interface CountStat {
-  total: number;
+interface ApiBrand {
+  id: number;
+  name: string;
 }
 
 interface ApiRequest {
   id: number;
   status: string;
-  createdAt: string;
-  createdBy: { firstName: string; lastName: string };
 }
 
 export default function DashboardPage() {
-  const { user } = useAuth();
-  const router = useRouter();
-  const permissions = user?.permissions?.map((p: any) => p.code) || [];
-  const canView = permissions.includes('dashboard:view');
-
   const [loading, setLoading] = useState(true);
-  const [requestStats, setRequestStats] = useState<RequestStats | null>(null);
-  const [flavorsTotal, setFlavorsTotal] = useState<number>(0);
-  const [usersTotal, setUsersTotal] = useState<number>(0);
-  const [latestRequests, setLatestRequests] = useState<ApiRequest[]>([]);
+  const [brands, setBrands] = useState<ApiBrand[]>([]);
+  const [flavors, setFlavors] = useState<ApiFlavor[]>([]);
+  const [requests, setRequests] = useState<ApiRequest[]>([]);
 
   useEffect(() => {
-    if (!canView) return;
     setLoading(true);
     Promise.all([
-      api.get<RequestStats>('/stats/requests'),
-      api.get<CountStat>('/stats/flavors'),
-      api.get<CountStat>('/stats/users'),
-      api.get<ApiRequest[]>('/requests?limit=5&sort=desc'),
+      api.get<ApiBrand[]>('/brands'),
+      api.get<ApiFlavor[]>('/flavors'),
+      api.get<ApiRequest[]>('/requests'),
     ])
-      .then(([reqRes, flvRes, usrRes, latestRes]) => {
-        setRequestStats(reqRes.data);
-        setFlavorsTotal(flvRes.data.total);
-        setUsersTotal(usrRes.data.total);
-        setLatestRequests(latestRes.data);
+      .then(([brandRes, flavorRes, requestRes]) => {
+        setBrands(brandRes.data);
+        setFlavors(flavorRes.data);
+        setRequests(requestRes.data);
       })
       .finally(() => setLoading(false));
-  }, [canView]);
+  }, []);
 
-  if (!canView) {
-    return (
-      <AuthGuard>
-        <p>У вас нет прав для просмотра дашборда.</p>
-      </AuthGuard>
-    );
-  }
+  const approved = requests.filter(r => r.status === 'approved').length;
+  const rejected = requests.filter(r => r.status === 'rejected').length;
+
+  const flavorsByBrand = brands
+    .map(b => ({
+      name: b.name,
+      value: flavors.filter(f => f.brandId === b.id).length,
+    }))
+    .filter(d => d.value > 0);
+
+  const profileMap: Record<string, number> = {};
+  flavors.forEach(f => {
+    const key = f.profile || 'Без профиля';
+    profileMap[key] = (profileMap[key] || 0) + 1;
+  });
+  const flavorsByProfile = Object.entries(profileMap).map(([name, value]) => ({
+    name,
+    value,
+  }));
+
+  const colors = ['#8884d8', '#82ca9d', '#ffc658', '#ff7f50', '#00C2FF', '#FFBB28', '#FF8042'];
 
   return (
     <AuthGuard>
-      {loading ? (
-        <Spinner />
-      ) : (
-        <div className="space-y-6 p-4 max-w-screen-xl mx-auto">
-          <h1 className="text-2xl font-bold">Дашборд</h1>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-            <Card title="Заявки" value={requestStats?.total ?? 0} />
-            <Card title="Вкусы" value={flavorsTotal} />
-            <Card title="Пользователи" value={usersTotal} />
-          </div>
-          <div>
-            <h2 className="text-xl font-bold mb-2">Последние заявки</h2>
-            <div className="overflow-x-auto">
-              <table className="min-w-full text-sm text-left bg-[#1E1E1E] rounded">
-                <thead>
-                  <tr>
-                    <th className="p-2">ID</th>
-                    <th className="p-2">Пользователь</th>
-                    <th className="p-2">Статус</th>
-                    <th className="p-2">Дата</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {latestRequests.map(r => (
-                    <tr
-                      key={r.id}
-                      onClick={() => router.push(`/requests/${r.id}`)}
-                      className="border-t border-gray-700 cursor-pointer hover:bg-[#2A2A2A] flex flex-col sm:table-row"
-                    >
-                      <td className="p-2">{r.id}</td>
-                      <td className="p-2">
-                        {r.createdBy.firstName} {r.createdBy.lastName}
-                      </td>
-                      <td className="p-2">
-                        <StatusBadge status={r.status} />
-                      </td>
-                      <td className="p-2">
-                        {new Date(r.createdAt).toLocaleString()}
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+      <div className="space-y-6 max-w-screen-xl mx-auto">
+        <h1 className="text-2xl font-bold">Дашборд</h1>
+        {loading ? (
+          <Spinner />
+        ) : (
+          <>
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 p-4">
+              <div className="bg-[#1E1E1E] p-4 rounded text-center shadow">
+                <div className="text-sm text-gray-400">Вкусы</div>
+                <div className="text-2xl font-semibold">{flavors.length}</div>
+              </div>
+              <div className="bg-[#1E1E1E] p-4 rounded text-center shadow">
+                <div className="text-sm text-gray-400">Заявки</div>
+                <div className="text-2xl font-semibold">{requests.length}</div>
+              </div>
+              <div className="bg-[#1E1E1E] p-4 rounded text-center shadow">
+                <div className="text-sm text-gray-400">Одобрено</div>
+                <div className="text-2xl font-semibold">{approved}</div>
+              </div>
+              <div className="bg-[#1E1E1E] p-4 rounded text-center shadow">
+                <div className="text-sm text-gray-400">Отклонено</div>
+                <div className="text-2xl font-semibold">{rejected}</div>
+              </div>
             </div>
-          </div>
-        </div>
-      )}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 p-4">
+              <div className="bg-[#1E1E1E] p-4 rounded w-full overflow-auto">
+                <h2 className="text-lg font-semibold mb-2">Вкусы по брендам</h2>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={flavorsByBrand}>
+                    <XAxis dataKey="name" stroke="#fff" />
+                    <YAxis stroke="#fff" allowDecimals={false} />
+                    <Tooltip />
+                    <Bar dataKey="value" fill="#00C2FF" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </div>
+              <div className="bg-[#1E1E1E] p-4 rounded w-full overflow-auto">
+                <h2 className="text-lg font-semibold mb-2">Профили вкусов</h2>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie data={flavorsByProfile} dataKey="value" nameKey="name" label>
+                      {flavorsByProfile.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={colors[index % colors.length]} />
+                      ))}
+                    </Pie>
+                    <Legend />
+                    <Tooltip />
+                  </PieChart>
+                </ResponsiveContainer>
+              </div>
+            </div>
+          </>
+        )}
+      </div>
     </AuthGuard>
   );
 }
