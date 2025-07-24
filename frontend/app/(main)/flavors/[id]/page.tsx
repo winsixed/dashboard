@@ -16,6 +16,15 @@ interface ApiFlavor {
   brand: { id: number; name: string };
 }
 
+const profileLabels: Record<string, string> = {
+  Sweet: 'Сладкий',
+  Fruity: 'Фруктовый',
+  Minty: 'Мятный',
+  Creamy: 'Сливочный',
+  Rich: 'Насыщенный',
+  Tobacco: 'Табачный',
+};
+
 export default function FlavorDetailsPage() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
@@ -59,7 +68,7 @@ export default function FlavorDetailsPage() {
                   </tr>
                   <tr className="flex flex-col sm:table-row">
                     <td className="p-2 font-semibold">Профиль</td>
-                    <td className="p-2">{flavor.profile || '-'}</td>
+                    <td className="p-2">{flavor.profile ? profileLabels[flavor.profile] || flavor.profile : '-'}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
                     <td className="p-2 font-semibold">Бренд</td>

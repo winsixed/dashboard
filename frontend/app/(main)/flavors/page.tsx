@@ -21,6 +21,15 @@ interface ApiBrand {
   name: string;
 }
 
+const profileLabels: Record<string, string> = {
+  Sweet: 'Сладкий',
+  Fruity: 'Фруктовый',
+  Minty: 'Мятный',
+  Creamy: 'Сливочный',
+  Rich: 'Насыщенный',
+  Tobacco: 'Табачный',
+};
+
 export default function FlavorsPage() {
   const router = useRouter();
   const { user } = useAuth();
@@ -159,7 +168,7 @@ export default function FlavorsPage() {
             <option value="">Все профили</option>
             {profiles.map(p => (
               <option key={p} value={p}>
-                {p}
+                {profileLabels[p] || p}
               </option>
             ))}
           </select>
@@ -212,7 +221,7 @@ export default function FlavorsPage() {
                     </td>
                   )}
                   <td className="p-2">{f.name}</td>
-                  <td className="p-2">{f.profile || '-'}</td>
+                  <td className="p-2">{f.profile ? profileLabels[f.profile] || f.profile : '-'}</td>
                   <td className="p-2">{f.brand.name}</td>
                   <td className="p-2 space-x-2">
                     <Link href={`/flavors/${f.id}`} className="px-2 py-1 bg-accent text-black rounded">
