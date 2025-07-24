@@ -55,9 +55,40 @@ export default function BrandDetailsPage() {
       ) : error ? (
         <p className="text-red-500">{error}</p>
       ) : brand ? (
-        <div className="space-y-4">
-          <div className="bg-[#1E1E1E] p-4 rounded">
-            <h1 className="text-xl font-bold mb-4">{brand.name}</h1>
+        <div className="space-y-4 p-4 max-w-screen-sm mx-auto">
+          <div className="bg-[#1E1E1E] p-4 rounded space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+              <h1 className="text-xl font-bold">{brand.name}</h1>
+              {(canEdit || canDelete) && (
+                <div className="mt-4 sm:mt-0 space-y-2 sm:space-y-0 sm:space-x-2 text-center sm:text-right">
+                  {canEdit && (
+                    <Link
+                      href={`/brands/${brand.id}/edit`}
+                      className="block w-full sm:w-auto px-4 py-2 bg-accent text-black rounded"
+                    >
+                      Edit
+                    </Link>
+                  )}
+                  {canDelete && (
+                    <button
+                      onClick={async () => {
+                        if (window.confirm('Are you sure you want to delete this brand?')) {
+                          try {
+                            await api.delete(`/brands/${brand.id}`);
+                            router.push('/brands');
+                          } catch (err) {
+                            alert('Failed to delete brand');
+                          }
+                        }
+                      }}
+                      className="block w-full sm:w-auto px-4 py-2 bg-red-600 text-white rounded"
+                    >
+                      Delete
+                    </button>
+                  )}
+                </div>
+              )}
+            </div>
             <h2 className="text-lg font-semibold mb-2">Flavors</h2>
             {flavors.length > 0 ? (
               <table className="w-full text-sm">
@@ -82,37 +113,6 @@ export default function BrandDetailsPage() {
               <p>No flavors found</p>
             )}
           </div>
-          {(canEdit || canDelete) && (
-            <div className="space-x-2">
-              {canEdit && (
-                <Link
-                  href={`/brands/${brand.id}/edit`}
-                  className="px-4 py-2 bg-accent text-black rounded"
-                >
-                  Edit
-                </Link>
-              )}
-              {canDelete && (
-                <button
-                  onClick={async () => {
-                    if (
-                      window.confirm('Are you sure you want to delete this brand?')
-                    ) {
-                      try {
-                        await api.delete(`/brands/${brand.id}`);
-                        router.push('/brands');
-                      } catch (err) {
-                        alert('Failed to delete brand');
-                      }
-                    }
-                  }}
-                  className="px-4 py-2 bg-red-600 text-white rounded"
-                >
-                  Delete
-                </button>
-              )}
-            </div>
-          )}
         </div>
       ) : null}
     </AuthGuard>
