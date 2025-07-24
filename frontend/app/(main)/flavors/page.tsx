@@ -28,11 +28,17 @@ export default function FlavorsPage() {
   const [brandId, setBrandId] = useState<number | ''>('');
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    api.get<ApiBrand[]>('/brands').then(res => setBrands(res.data));
-  }, []);
+  const permissions = user?.permissions?.map((p: any) => p.code) || [];
+  const canView = permissions.includes('flavors:view');
+  const canCreate = permissions.includes('flavors:create');
 
   useEffect(() => {
+    if (!canView) return;
+    api.get<ApiBrand[]>('/brands').then(res => setBrands(res.data));
+  }, [canView]);
+
+  useEffect(() => {
+    if (!canView) return;
     setLoading(true);
     api
       .get<ApiFlavor[]>('/flavors', {
@@ -43,10 +49,15 @@ export default function FlavorsPage() {
       })
       .then(res => setFlavors(res.data))
       .finally(() => setLoading(false));
-  }, [search, brandId]);
+  }, [search, brandId, canView]);
 
-  const permissions = user?.permissions?.map((p: any) => p.code) || [];
-  const canCreate = permissions.includes('flavors:create');
+  if (!canView) {
+    return (
+      <AuthGuard>
+        <p>You do not have permission to view flavors.</p>
+      </AuthGuard>
+    );
+  }
 
   return (
     <AuthGuard>
