@@ -13,8 +13,8 @@ interface ApiUser {
   firstName: string;
   lastName: string;
   email: string;
-  role: { name: string };
-  createdAt: string;
+  roles: { name: string }[];
+  createdAt?: string;
 }
 
 export default function UserDetailsPage() {
@@ -24,7 +24,12 @@ export default function UserDetailsPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
+  const permissions = user?.permissions?.map((p: any) => p.code) || [];
+  const canView = permissions.includes('users:view');
+  const canEdit = permissions.includes('users:edit');
+
   useEffect(() => {
+    if (!canView) return;
     setLoading(true);
     api
       .get<ApiUser>(`/users/${params.id}`)
@@ -34,10 +39,15 @@ export default function UserDetailsPage() {
       })
       .catch(() => setError('Failed to load user'))
       .finally(() => setLoading(false));
-  }, [params.id]);
+  }, [params.id, canView]);
 
-  const permissions = user?.permissions?.map((p: any) => p.code) || [];
-  const canEdit = permissions.includes('users:edit');
+  if (!canView) {
+    return (
+      <AuthGuard>
+        <p>You do not have permission to view this user.</p>
+      </AuthGuard>
+    );
+  }
 
   return (
     <AuthGuard>
@@ -54,18 +64,28 @@ export default function UserDetailsPage() {
             <table className="w-full text-sm">
               <tbody>
                 <tr>
+                  <td className="p-2 font-semibold">ID</td>
+                  <td className="p-2">{data.id}</td>
+                </tr>
+                <tr>
+                  <td className="p-2 font-semibold">First Name</td>
+                  <td className="p-2">{data.firstName}</td>
+                </tr>
+                <tr>
+                  <td className="p-2 font-semibold">Last Name</td>
+                  <td className="p-2">{data.lastName}</td>
+                </tr>
+                <tr>
                   <td className="p-2 font-semibold">Email</td>
                   <td className="p-2">{data.email}</td>
                 </tr>
                 <tr>
-                  <td className="p-2 font-semibold">Role</td>
-                  <td className="p-2">{data.role.name}</td>
+                  <td className="p-2 font-semibold">Roles</td>
+                  <td className="p-2">{data.roles.map(r => r.name).join(', ')}</td>
                 </tr>
                 <tr>
                   <td className="p-2 font-semibold">Created At</td>
-                  <td className="p-2">
-                    {data.createdAt ? new Date(data.createdAt).toLocaleString() : ''}
-                  </td>
+                  <td className="p-2">{data.createdAt ? new Date(data.createdAt).toLocaleString() : ''}</td>
                 </tr>
               </tbody>
             </table>
