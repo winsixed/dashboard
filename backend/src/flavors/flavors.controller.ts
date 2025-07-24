@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, ParseIntPipe, Post, Put, UseGuards, Query } from '@nestjs/common';
 import { FlavorsService } from './flavors.service';
 import { CreateFlavorDto } from './dto/create-flavor.dto';
 import { UpdateFlavorDto } from './dto/update-flavor.dto';
@@ -12,8 +12,16 @@ export class FlavorsController {
   constructor(private flavors: FlavorsService) {}
 
   @Get()
-  list() {
-    return this.flavors.list();
+  list(
+    @Query('brandId') brandId?: string,
+    @Query('profile') profile?: string,
+    @Query('sort') sort?: string,
+  ) {
+    return this.flavors.list(
+      brandId ? Number(brandId) : undefined,
+      profile,
+      sort,
+    );
   }
 
   @Post()
