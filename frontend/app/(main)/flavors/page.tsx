@@ -32,10 +32,13 @@ export default function FlavorsPage() {
   const [profile, setProfile] = useState('');
   const [sort, setSort] = useState('name_asc');
   const [loading, setLoading] = useState(true);
+  const [selected, setSelected] = useState<number[]>([]);
 
   const permissions = user?.permissions?.map((p: any) => p.code) || [];
   const canView = permissions.includes('flavors:view');
   const canCreate = permissions.includes('flavors:create');
+  const canUpdate = permissions.includes('flavors:update');
+  const canDelete = permissions.includes('flavors:delete');
 
   useEffect(() => {
     if (!canView) return;
@@ -80,6 +83,42 @@ export default function FlavorsPage() {
       .then(res => setFlavors(res.data))
       .finally(() => setLoading(false));
   }, [search, brandId, profile, sort, canView]);
+
+  const toggleSelect = (id: number) => {
+    setSelected(prev =>
+      prev.includes(id) ? prev.filter(i => i !== id) : [...prev, id],
+    );
+  };
+
+  const allSelected =
+    flavors.length > 0 && selected.length === flavors.length;
+
+  const toggleSelectAll = () => {
+    if (allSelected) {
+      setSelected([]);
+    } else {
+      setSelected(flavors.map(f => f.id));
+    }
+  };
+
+  const deleteSelected = async () => {
+    if (
+      !canDelete ||
+      selected.length === 0 ||
+      !window.confirm('Вы уверены, что хотите удалить выбранные вкусы?')
+    ) {
+      return;
+    }
+    for (const id of selected) {
+      try {
+        await api.delete(`/flavors/${id}`);
+      } catch (err) {
+        console.error(err);
+      }
+    }
+    setFlavors(prev => prev.filter(f => !selected.includes(f.id)));
+    setSelected([]);
+  };
 
   if (!canView) {
     return (
@@ -145,6 +184,15 @@ export default function FlavorsPage() {
             <table className="min-w-full text-sm text-left bg-[#1E1E1E] rounded">
               <thead>
                 <tr>
+                  {canDelete && (
+                    <th className="p-2">
+                      <input
+                        type="checkbox"
+                        checked={allSelected}
+                        onChange={toggleSelectAll}
+                      />
+                    </th>
+                  )}
                   <th className="p-2">Название</th>
                   <th className="p-2">Профиль</th>
                   <th className="p-2">Бренд</th>
@@ -154,18 +202,61 @@ export default function FlavorsPage() {
               <tbody>
               {flavors.map(f => (
                 <tr key={f.id} className="border-t border-gray-700 flex flex-col sm:table-row">
+                  {canDelete && (
+                    <td className="p-2">
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(f.id)}
+                        onChange={() => toggleSelect(f.id)}
+                      />
+                    </td>
+                  )}
                   <td className="p-2">{f.name}</td>
                   <td className="p-2">{f.profile || '-'}</td>
                   <td className="p-2">{f.brand.name}</td>
-                  <td className="p-2">
+                  <td className="p-2 space-x-2">
                     <Link href={`/flavors/${f.id}`} className="px-2 py-1 bg-accent text-black rounded">
                       Просмотр
                     </Link>
+                    {canUpdate && (
+                      <Link href={`/flavors/${f.id}/edit`} className="px-2 py-1 bg-accent text-black rounded">
+                        Редактировать
+                      </Link>
+                    )}
+                    {canDelete && (
+                      <button
+                        onClick={async () => {
+                          if (
+                            window.confirm('Вы уверены, что хотите удалить выбранные вкусы?')
+                          ) {
+                            try {
+                              await api.delete(`/flavors/${f.id}`);
+                              setFlavors(prev => prev.filter(fl => fl.id !== f.id));
+                            } catch (err) {
+                              alert('Не удалось удалить вкус');
+                            }
+                          }
+                        }}
+                        className="px-2 py-1 bg-red-600 text-white rounded"
+                      >
+                        Удалить
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
               </tbody>
             </table>
+          </div>
+        )}
+        {canDelete && selected.length > 0 && (
+          <div className="fixed bottom-4 inset-x-0 flex justify-center z-10">
+            <button
+              onClick={deleteSelected}
+              className="px-4 py-2 bg-red-600 text-white rounded"
+            >
+              Удалить выбранные
+            </button>
           </div>
         )}
       </div>
