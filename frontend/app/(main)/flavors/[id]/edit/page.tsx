@@ -104,7 +104,8 @@ export default function FlavorEditPage() {
           </div>
           <div>
             <label className="block mb-1">Description</label>
-            <textarea
+            <input
+              type="text"
               value={description}
               onChange={e => setDescription(e.target.value)}
               className="w-full p-2 bg-[#1E1E1E] rounded"
