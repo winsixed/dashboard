@@ -77,7 +77,7 @@ export default function UserDetailsPage() {
                     <td className="p-2">{data.lastName}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">
-                    <td className="p-2 font-semibold">Email</td>
+                    <td className="p-2 font-semibold">Электронная почта</td>
                     <td className="p-2">{data.email}</td>
                   </tr>
                   <tr className="flex flex-col sm:table-row">

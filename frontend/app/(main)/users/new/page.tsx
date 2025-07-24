@@ -91,7 +91,7 @@ export default function UserCreatePage() {
             />
           </div>
           <div>
-            <label className="block mb-1">Email</label>
+            <label className="block mb-1">Электронная почта</label>
             <input
               type="email"
               value={email}

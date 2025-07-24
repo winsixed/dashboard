@@ -17,7 +17,7 @@ export default function UserTable({ users }: { users: User[] }) {
           <tr>
             <th className="p-2">ID</th>
             <th className="p-2">ФИО</th>
-            <th className="p-2">Email</th>
+            <th className="p-2">Электронная почта</th>
             <th className="p-2">Роль</th>
             <th className="p-2">Создан</th>
           </tr>
@@ -29,7 +29,7 @@ export default function UserTable({ users }: { users: User[] }) {
               <td className="p-2">{u.firstName} {u.lastName}</td>
               <td className="p-2">{u.username}</td>
               <td className="p-2">{u.role?.name}</td>
-              <td className="p-2">{u.createdAt ? new Date(u.createdAt).toLocaleString() : 'N/A'}</td>
+              <td className="p-2">{u.createdAt ? new Date(u.createdAt).toLocaleString() : 'н/д'}</td>
             </tr>
           ))}
         </tbody>
