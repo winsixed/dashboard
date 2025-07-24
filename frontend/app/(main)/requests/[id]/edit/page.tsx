@@ -87,51 +87,55 @@ export default function RequestEditPage() {
       {loading ? (
         <Spinner />
       ) : (
-        <form onSubmit={onSubmit} className="space-y-4 max-w-md">
-          {error && <p className="text-red-500">{error}</p>}
-          <div>
-            <label className="block mb-1">Flavor</label>
-            <select
-              value={flavorId}
-              onChange={e => setFlavorId(Number(e.target.value))}
-              className="w-full p-2 bg-[#1E1E1E] text-white rounded"
-            >
-              <option value="" disabled>
-                Select Flavor
-              </option>
-              {flavors.map(f => (
-                <option key={f.id} value={f.id}>
-                  {f.name}
+        <div className="p-4 max-w-screen-sm mx-auto">
+          <form onSubmit={onSubmit} className="space-y-4">
+            {error && <p className="text-red-500">{error}</p>}
+            <div>
+              <label className="block mb-1">Flavor</label>
+              <select
+                value={flavorId}
+                onChange={e => setFlavorId(Number(e.target.value))}
+                className="w-full p-2 bg-[#1E1E1E] text-white rounded"
+              >
+                <option value="" disabled>
+                  Select Flavor
                 </option>
-              ))}
-            </select>
-          </div>
-          <div>
-            <label className="block mb-1">Quantity</label>
-            <input
-              type="number"
-              value={quantity}
-              onChange={e => setQuantity(Number(e.target.value))}
-              className="w-full p-2 bg-[#1E1E1E] text-white rounded"
-            />
-          </div>
-          <div>
-            <label className="block mb-1">Note</label>
-            <input
-              type="text"
-              value={note}
-              onChange={e => setNote(e.target.value)}
-              className="w-full p-2 bg-[#1E1E1E] text-white rounded"
-            />
-          </div>
-          <button
-            type="submit"
-            disabled={saving}
-            className="px-4 py-2 bg-accent text-black rounded disabled:opacity-50"
-          >
-            {saving ? 'Saving...' : 'Save Changes'}
-          </button>
-        </form>
+                {flavors.map(f => (
+                  <option key={f.id} value={f.id}>
+                    {f.name}
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label className="block mb-1">Quantity</label>
+              <input
+                type="number"
+                value={quantity}
+                onChange={e => setQuantity(Number(e.target.value))}
+                className="w-full p-2 bg-[#1E1E1E] text-white rounded"
+              />
+            </div>
+            <div>
+              <label className="block mb-1">Note</label>
+              <input
+                type="text"
+                value={note}
+                onChange={e => setNote(e.target.value)}
+                className="w-full p-2 bg-[#1E1E1E] text-white rounded"
+              />
+            </div>
+            <div className="flex justify-center">
+              <button
+                type="submit"
+                disabled={saving}
+                className="w-full sm:w-auto px-4 py-2 bg-accent text-black rounded disabled:opacity-50"
+              >
+                {saving ? 'Saving...' : 'Save Changes'}
+              </button>
+            </div>
+          </form>
+        </div>
       )}
     </AuthGuard>
   );
