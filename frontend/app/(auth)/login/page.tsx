@@ -26,7 +26,7 @@ export default function LoginPage() {
           type="email"
           value={email}
           onChange={e => setEmail(e.target.value)}
-          placeholder="Email"
+          placeholder="Электронная почта"
           className="w-full p-2 bg-[#2A2A2A] text-white rounded"
         />
         <input

@@ -46,7 +46,7 @@ export default function UsersPage() {
                   <th className="p-2">ID</th>
                   <th className="p-2">Имя</th>
                   <th className="p-2">Фамилия</th>
-                  <th className="p-2">Email</th>
+                  <th className="p-2">Электронная почта</th>
                   <th className="p-2">Роли</th>
                 </tr>
               </thead>
