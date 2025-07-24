@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import Link from 'next/link';
 import AuthGuard from '../../../../components/AuthGuard';
 import Spinner from '../../../../components/Spinner';
@@ -42,27 +43,30 @@ export default function RequestDetailsPage() {
   const approve = async () => {
     try {
       await api.put(`/requests/${params.id}/status`, { status: 'approved' });
+      toast.success('Request approved');
       fetchData();
     } catch (err) {
-      setError('Failed to update status');
+      toast.error('Failed to update status');
     }
   };
 
   const reject = async () => {
     try {
       await api.put(`/requests/${params.id}/status`, { status: 'rejected' });
+      toast.success('Request rejected');
       fetchData();
     } catch (err) {
-      setError('Failed to update status');
+      toast.error('Failed to update status');
     }
   };
 
   const remove = async () => {
     try {
       await api.delete(`/requests/${params.id}`);
+      toast.success('Request deleted');
       router.push('/requests');
     } catch (err) {
-      setError('Failed to delete request');
+      toast.error('Failed to delete request');
     }
   };
 

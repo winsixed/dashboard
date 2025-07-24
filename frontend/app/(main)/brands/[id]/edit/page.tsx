@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useParams, useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import AuthGuard from '../../../../../components/AuthGuard';
 import Spinner from '../../../../../components/Spinner';
 import api from '../../../../../lib/api';
@@ -43,9 +44,10 @@ export default function BrandEditPage() {
     setError('');
     try {
       await api.patch(`/brands/${params.id}`, { name });
+      toast.success('Brand saved');
       router.push(`/brands/${params.id}`);
     } catch (err) {
-      setError('Failed to save brand');
+      toast.error('Failed to save brand');
     } finally {
       setSaving(false);
     }

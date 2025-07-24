@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import AuthGuard from '../../../../components/AuthGuard';
 import api from '../../../../lib/api';
 import { useAuth } from '../../../../context/AuthContext';
@@ -23,9 +24,10 @@ export default function BrandCreatePage() {
     setError('');
     try {
       const res = await api.post('/brands', { name });
+      toast.success('Brand created');
       router.push(`/brands/${res.data.id}`);
     } catch (err) {
-      setError('Failed to create brand');
+      toast.error('Failed to create brand');
     } finally {
       setSaving(false);
     }

@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { toast } from 'react-hot-toast';
 import AuthGuard from '../../../../components/AuthGuard';
 import Spinner from '../../../../components/Spinner';
 import api from '../../../../lib/api';
@@ -46,9 +47,10 @@ export default function RequestCreatePage() {
         quantity: Number(quantity),
         note,
       });
+      toast.success('Request created');
       router.push(`/requests/${res.data.id}`);
     } catch (err) {
-      setError('Failed to create request');
+      toast.error('Failed to create request');
     } finally {
       setSaving(false);
     }
